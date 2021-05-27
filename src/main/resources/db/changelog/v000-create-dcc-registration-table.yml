@@ -1,0 +1,115 @@
+databaseChangeLog:
+  - changeSet:
+      id: create-dcc-registration-table
+      author: f11h
+      changes:
+        - createTable:
+            tableName: dcc_registration
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  constraints:
+                    unique: true
+                    nullable: false
+                    primaryKey: true
+              - column:
+                  name: version
+                  type: bigint
+                  constraints:
+                    nullable: false
+              - column:
+                  name: created_at
+                  type: datetime
+                  constraints:
+                    nullable: false
+              - column:
+                  name: updated_at
+                  type: datetime
+                  constraints:
+                    nullable: false
+              - column:
+                  name: hashed_guid
+                  type: varchar(64)
+                  constraints:
+                    nullable: true
+              - column:
+                  name: lab_id
+                  type: varchar(100)
+                  constraints:
+                    nullable: true
+              - column:
+                  name: registration_token
+                  type: varchar(36)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: public_key
+                  type: varchar(1000)
+                  constraints:
+                    nullable: true
+              - column:
+                  name: dcci
+                  type: varchar(50)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: encrypted_data_encryption_key
+                  type: varchar(255)
+                  constraints:
+                    nullable: true
+              - column:
+                  name: dcc_hash
+                  type: varchar(64)
+                  constraints:
+                    nullable: true
+              - column:
+                  name: dcc_encrypted_payload
+                  type: varchar(1000)
+                  constraints:
+                    nullable: true
+              - column:
+                  name: dcc
+                  type: varchar(1000)
+                  constraints:
+                    nullable: true
+              - column:
+                  name: error
+                  type: varchar(32)
+                  constraints:
+                    nullable: true
+  - changeSet:
+      id: create-dcc-registration-table-increment
+      author: f11h
+      changes:
+        - addAutoIncrement:
+            tableName: dcc_registration
+            columnName: id
+            columnDataType: bigint
+            startWith: 1
+            incrementBy: 1
+  - changeSet:
+      id: create-dcc-registration-table-indexes
+      author: f11h
+      changes:
+        - createIndex:
+            tableName: dcc_registration
+            indexName: idx_dcc_registration_hashed_guid
+            columns:
+              - column:
+                  name: hashed_guid
+                  type: varchar(64)
+        - createIndex:
+            tableName: dcc_registration
+            indexName: idx_dcc_registration_lab_id
+            columns:
+              - column:
+                  name: lab_id
+                  type: varchar(100)
+        - createIndex:
+            tableName: dcc_registration
+            indexName: idx_dcc_registration_registration_token
+            columns:
+              - column:
+                  name: registration_token
+                  type: varchar(32)

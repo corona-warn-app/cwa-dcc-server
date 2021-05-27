@@ -1,0 +1,19 @@
+databaseChangeLog:
+  - include:
+      file: changelog/v000-create-dcc-registration-table.yml
+      relativeToChangelogFile: true
+  - include:
+      file: changelog/v001-create-shedlock-table.yml
+      relativeToChangelogFile: true
+  - include:
+      file: changelog/v002-allow-null-for-registration-token.yml
+      relativeToChangelogFile: true
+  - include:
+      file: changelog/v003-add-partner-id-column.yml
+      relativeToChangelogFile: true
+  - include:
+      file: changelog/v004-increase-dek-column-size.yml
+      relativeToChangelogFile: true
+  - include:
+      file: changelog/v005-create-lab-id-claim-table.yml
+      relativeToChangelogFile: true

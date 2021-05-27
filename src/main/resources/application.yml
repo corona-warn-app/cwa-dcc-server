@@ -1,0 +1,81 @@
+spring:
+  application:
+    name: cwa-dcc-server
+  datasource:
+    driver-class-name: org.h2.Driver
+    url: jdbc:h2:mem:dcc
+    username: sa
+    password: ''
+  jpa:
+    database-platform: org.hibernate.dialect.H2Dialect
+    hibernate:
+      ddl-auto: validate
+  liquibase:
+    change-log: classpath:db/changelog.yml
+feign:
+  client:
+    config:
+      default:
+        connect-timeout: 5000
+        read-timeout: 5000
+        logger-level: basic
+management:
+  server:
+    ssl:
+      enabled: false
+    port: 8081
+  endpoint:
+    info:
+      enabled: true
+    health:
+      enabled: true
+    metrics:
+      enabled: true
+    prometheus:
+      enabled: true
+  endpoints:
+    enabled-by-default: false
+    web:
+      exposure:
+        include: info,health,metrics,prometheus
+    jmx:
+      exposure:
+        include: info,health,metrics,prometheus
+  health:
+    probes:
+      enabled: true
+  metrics:
+    export:
+      prometheus:
+        enabled: true
+cwa:
+  dcc:
+    dcciPrefix: URN:UVCI:V1:DE
+    verification-server:
+      enable-mtls: false
+      base-url: http://localhost:8088
+    signing-api-server:
+      enable-mtls: false
+      base-url: https://api.certify.demo.ubirch.com
+      key-store-path: classpath:keystore.jks
+      key-store-password: changeit
+      trust-store-password: classpath:truststore.jks
+      trust-store-path: changeit
+      proxy:
+        enabled: false
+      api-key:
+      verify-hostnames: true
+    request:
+      sizelimit: 10000
+    cleanup:
+      dcc-data: 4
+      registration-token: 21
+      entity: 180
+      rate: 600000
+
+springdoc:
+  api-docs:
+    path: /api/docs
+    enabled: true
+  swagger-ui:
+    path: /api/swagger

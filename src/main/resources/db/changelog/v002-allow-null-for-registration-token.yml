@@ -1,0 +1,8 @@
+databaseChangeLog:
+  - changeSet:
+      id: allow-null-for-registration-token
+      author: f11h
+      changes:
+        - dropNotNullConstraint:
+            tableName: dcc_registration
+            columnName: registration_token
