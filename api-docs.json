@@ -1,0 +1,194 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "cwa-dcc-server",
+    "license": {
+      "name": "Apache 2.0",
+      "url": "http://www.apache.org/licenses/LICENSE-2.0"
+    },
+    "version": "1.0.0-SNAPSHOT"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:8080",
+      "description": "Generated server url"
+    }
+  ],
+  "paths": {
+    "/version/v1/publicKey": {
+      "post": {
+        "tags": [
+          "public-key-controller"
+        ],
+        "summary": "Upload a Public Key",
+        "description": "Uploads a Public Key to a Registration Token from Verification Server to generate Digital Covid Certificate data.",
+        "operationId": "uploadPublicKey",
+        "parameters": [
+          {
+            "name": "cwa-fake",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UploadPublicKeyRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Public Key uploaded and associated."
+          },
+          "400": {
+            "description": "Bad Request. (e.g. Wrong Format of RegistrationToken or PublicKey)."
+          },
+          "403": {
+            "description": "RegistrationToken is not allowed to issue a DCC (e.g. Token is issued for TeleTan)."
+          },
+          "404": {
+            "description": "RegistrationToken does not exists."
+          },
+          "409": {
+            "description": "RegistrationToken is already assigned with a PublicKey."
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/version/v1/dcc": {
+      "post": {
+        "tags": [
+          "dcc-claim-controller"
+        ],
+        "summary": "COVID-19 Test Result DCC Components",
+        "description": "Gets the components to build a Digital Covid Certificate with the result of COVID-19 Test.",
+        "operationId": "getDccComponents",
+        "parameters": [
+          {
+            "name": "cwa-fake",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RegistrationToken"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "DCC Components retrieved",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DccResponse"
+                }
+              }
+            }
+          },
+          "202": {
+            "description": "DCC is pending."
+          },
+          "400": {
+            "description": "Bad Request. (Invalid RegistrationToken format)"
+          },
+          "404": {
+            "description": "Registration Token does not exist/ is not registered at DCC-Server."
+          },
+          "410": {
+            "description": "DCC already cleaned up."
+          },
+          "412": {
+            "description": "TestResult not yet received."
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "reason": {
+                      "type": "string",
+                      "enum": [
+                        "SIGNING_CLIENT_ERROR",
+                        "SIGNING_SERVER_ERROR",
+                        "LAB_INVALID_RESPONSE",
+                        "INTERNAL"
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "UploadPublicKeyRequest": {
+        "type": "object",
+        "required": [
+          "registrationToken",
+          "publicKey"
+        ],
+        "properties": {
+          "registrationToken": {
+            "type": "string",
+            "description": "registrationToken from Verification Server"
+          },
+          "publicKey": {
+            "type": "string",
+            "description": "Base64 encoded public key in DER format to encrypt DCC payload components."
+          }
+        },
+        "description": "The upload Public Key request model."
+      },
+      "RegistrationToken": {
+        "required": [
+          "registrationToken"
+        ],
+        "type": "object",
+        "properties": {
+          "registrationToken": {
+            "pattern": "^[a-f0-9]{8}-[a-f0-9]{4}-4[a-f0-9]{3}-[89aAbB][a-f0-9]{3}-[a-f0-9]{12}$",
+            "type": "string"
+          }
+        },
+        "description": "The registration token model."
+      },
+      "DccResponse": {
+        "type": "object",
+        "properties": {
+          "dek": {
+            "type": "string",
+            "description": "Data Encryption Key (Encrypted AES-256 Key, encrypted with uploaders public key)"
+          },
+          "dcc": {
+            "type": "string",
+            "description": "Base64 encoded DCC COSE Object. Payload is encrypted with data encryption key."
+          }
+        }
+      }
+    }
+  }
+}
