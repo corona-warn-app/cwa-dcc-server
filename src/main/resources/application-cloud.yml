@@ -8,15 +8,41 @@ spring:
     database-platform: org.hibernate.dialect.PostgreSQLDialect
 server:
   ssl:
-    hostname-verify: false
+    protocol: TLS
+    enabled-protocols: TLSv1.3,TLSv1.2
+    ciphers: >-
+      TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256
+      TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384
+      TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+      TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+      TLS_DHE_DSS_WITH_AES_128_GCM_SHA256
+      TLS_DHE_DSS_WITH_AES_256_GCM_SHA384
+      TLS_DHE_RSA_WITH_AES_128_GCM_SHA256
+      TLS_DHE_RSA_WITH_AES_256_GCM_SHA384
+      TLS_AES_128_GCM_SHA256
+      TLS_AES_256_GCM_SHA384
+      TLS_AES_128_CCM_SHA256
     key-store: ${SSL_VERIFICATION_KEYSTORE_PATH}
     key-store-password: ${SSL_VERIFICATION_KEYSTORE_PASSWORD}
     trust-store:  ${SSL_VERIFICATION_TRUSTSTORE_PATH}
     trust-store-password: ${SSL_VERIFICATION_TRUSTSTORE_PASSWORD}
-cwa-testresult-server:
-  ssl:
-    hostname-verify: false
-    key-store: ${SSL_VERIFICATION_KEYSTORE_PATH}
-    key-store-password: ${SSL_VERIFICATION_KEYSTORE_PASSWORD}
-    trust-store:  ${SSL_VERIFICATION_TRUSTSTORE_PATH}
-    trust-store-password: ${SSL_VERIFICATION_TRUSTSTORE_PASSWORD}
+cwa:
+  dcc:
+    verification-server:
+      enable-mtls: true
+      base-url:
+    signing-api-server:
+      enable-mtls: true
+      base-url:
+      key-store-path: classpath:keystore.jks
+      key-store-password: changeit
+      trust-store-password: classpath:truststore.jks
+      trust-store-path: changeit
+      api-key:
+      verify-hostnames: true
+    request:
+      sizelimit: 10000
+    entities:
+      cleanup:
+        days: 21
+        rate: 1800000

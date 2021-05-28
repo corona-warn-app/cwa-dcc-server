@@ -3,7 +3,7 @@ spring:
     name: cwa-dcc-server
   datasource:
     driver-class-name: org.h2.Driver
-    url: jdbc:h2:mem:verification
+    url: jdbc:h2:mem:dcc
     username: sa
     password: ''
   jpa:
@@ -12,8 +12,6 @@ spring:
       ddl-auto: validate
   liquibase:
     change-log: classpath:db/changelog.yml
-server:
-  max-post-size: 10000
 feign:
   client:
     config:
@@ -21,14 +19,6 @@ feign:
         connect-timeout: 5000
         read-timeout: 5000
         logger-level: basic
-jwt:
-  server: http://localhost:8080
-  enabled: false
-springdoc:
-  api-docs:
-    path: /api/docs
-  swagger-ui:
-    path: /api/swagger
 management:
   server:
     ssl:
@@ -58,36 +48,32 @@ management:
     export:
       prometheus:
         enabled: true
-tan:
-  tele:
-    ratelimiting:
-      count: 1000
-      seconds: 3600
-      threshold-in-percent: 80
-    valid:
-      length: 9
-      hours: 1
-  valid:
-    days: 14
-appsession:
-  tancountermax: 1
-entities:
-  cleanup:
-    days: 21
-    rate: 3600000
-initialFakeDelayMilliseconds: 10
-fakeDelayMovingAverageSamples: 5
-request:
-  sizelimit: 10000
+cwa:
+  dcc:
+    verification-server:
+      enable-mtls: false
+      base-url: http://localhost:8088
+    signing-api-server:
+      enable-mtls: false
+      base-url: https://api.certify.demo.ubirch.com
+      key-store-path: classpath:keystore.jks
+      key-store-password: changeit
+      trust-store-password: classpath:truststore.jks
+      trust-store-path: changeit
+      proxy:
+        enabled: false
+      api-key:
+      verify-hostnames: true
+    request:
+      sizelimit: 10000
+    entities:
+      cleanup:
+        days: 21
+        rate: 1800000
 
-cwa-testresult-server:
-  url: http://localhost:8088
-  ssl:
-    enabled: false
-    one-way: false
-    two-way: false
-    hostname-verify: false
-    key-store: classpath:keystore.jks
-    key-store-password: changeit
-    trust-store: classpath:truststore.jks
-    trust-store-password: changeit
+springdoc:
+  api-docs:
+    path: /api/docs
+    enabled: true
+  swagger-ui:
+    path: /api/swagger
