@@ -23,6 +23,7 @@ package app.coronawarn.dcc.service;
 import app.coronawarn.dcc.client.VerificationServerClient;
 import app.coronawarn.dcc.domain.DccRegistration;
 import app.coronawarn.dcc.model.InternalTestResult;
+import app.coronawarn.dcc.model.LabTestResult;
 import app.coronawarn.dcc.model.RegistrationToken;
 import app.coronawarn.dcc.repository.DccRegistrationRepository;
 import feign.FeignException;
@@ -83,8 +84,10 @@ public class DccRegistrationService {
   }
 
   private InternalTestResult checkRegistrationTokenIsValid(String registrationToken) throws DccRegistrationException {
+    InternalTestResult testResult;
+
     try {
-      return verificationServerClient.result(new RegistrationToken(registrationToken));
+      testResult = verificationServerClient.result(new RegistrationToken(registrationToken));
     } catch (FeignException e) {
       log.info("Failed to validate registrationToken. Http Status from Verification Server: {}", e.status());
 
@@ -96,6 +99,13 @@ public class DccRegistrationService {
         throw new DccRegistrationException(DccRegistrationException.Reason.VERIFICATION_SERVER_ERROR);
       }
     }
+
+    if (testResult.getTestResult() == LabTestResult.PENDING.ordinal()
+      || testResult.getTestResult() == LabTestResult.QUICK_PENDING.ordinal()) {
+      throw new DccRegistrationException(DccRegistrationException.Reason.INVALID_REGISTRATION_TOKEN_FORBIDDEN);
+    }
+
+    return testResult;
   }
 
   /**
