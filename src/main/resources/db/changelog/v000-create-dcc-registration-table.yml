@@ -50,7 +50,7 @@ databaseChangeLog:
                     nullable: true
               - column:
                   name: dcci
-                  type: varchar(64)
+                  type: varchar(50)
                   constraints:
                     nullable: false
               - column:
