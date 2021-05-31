@@ -1,3 +1,23 @@
+/*-
+ * ---license-start
+ * Corona-Warn-App / cwa-dcc
+ * ---
+ * Copyright (C) 2020 - 2021 T-Systems International GmbH and all other contributors
+ * ---
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ * ---license-end
+ */
+
 package app.coronawarn.dcc.service;
 
 import app.coronawarn.dcc.client.VerificationServerClient;
@@ -31,13 +51,6 @@ public class DccRegistrationService {
 
   private final DcciGeneratorService dcciGeneratorService;
 
-  /**
-   * Create a new DCC Registration.
-   *
-   * @param registrationToken the registration token to create the registration for.
-   * @param publicKey         the PublicKey which has to be assigned to the registration.
-   * @throws DccRegistrationException with information which validation step has failed.
-   */
   public void createDccRegistration(String registrationToken, PublicKey publicKey) throws DccRegistrationException {
     checkRegistrationTokenAlreadyExists(registrationToken);
     InternalTestResult testResult = checkRegistrationTokenIsValid(registrationToken);
