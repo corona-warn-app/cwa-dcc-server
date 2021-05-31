@@ -1,7 +1,4 @@
 databaseChangeLog:
   - include:
-      file: changelog/v000-create-app-session-table.yml
-      relativeToChangelogFile: true
-  - include:
-      file: changelog/v000-create-tan-table.yml
+      file: changelog/v000-create-dcc-registration-table.yml
       relativeToChangelogFile: true
