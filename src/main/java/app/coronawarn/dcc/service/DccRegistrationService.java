@@ -12,6 +12,7 @@ import java.security.PublicKey;
 import java.security.spec.InvalidKeySpecException;
 import java.security.spec.X509EncodedKeySpec;
 import java.util.Base64;
+import java.util.List;
 import java.util.Optional;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -28,6 +29,8 @@ public class DccRegistrationService {
 
   private final VerificationServerClient verificationServerClient;
 
+  private final DcciGeneratorService dcciGeneratorService;
+
   /**
    * Create a new DCC Registration.
    *
@@ -39,18 +42,21 @@ public class DccRegistrationService {
     checkRegistrationTokenAlreadyExists(registrationToken);
     InternalTestResult testResult = checkRegistrationTokenIsValid(registrationToken);
 
-    log.info("PUBLIC KEY: {} {}", publicKey.getAlgorithm(), publicKey.getFormat());
-
     DccRegistration dccRegistration = DccRegistration.builder()
       .registrationToken(registrationToken)
       .publicKey(Base64.getEncoder().encodeToString(publicKey.getEncoded()))
       .hashedGuid(testResult.getTestId())
       .labId(testResult.getLabId())
+      .dcci(dcciGeneratorService.newDcci())
       .build();
 
     dccRegistrationRepository.save(dccRegistration);
 
     log.info("Saved new DCC Registration for RegistrationToken {}", registrationToken);
+  }
+
+  public List<DccRegistration> findByLabId(String labId) {
+    return dccRegistrationRepository.findByLabId(labId);
   }
 
   private void checkRegistrationTokenAlreadyExists(String registrationToken) throws DccRegistrationException {

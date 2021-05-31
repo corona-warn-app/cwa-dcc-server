@@ -50,6 +50,7 @@ management:
         enabled: true
 cwa:
   dcc:
+    dcciPrefix: URN:UVCI:V1:DE
     verification-server:
       enable-mtls: false
       base-url: http://localhost:8088

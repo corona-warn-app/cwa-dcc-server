@@ -43,6 +43,8 @@ public class DccApplicationConfig {
   private MtlsConfiguration verificationServer = new MtlsConfiguration();
   private MtlsConfiguration signingApiServer = new MtlsConfiguration();
 
+  private String dcciPrefix;
+
   /**
    * Configure the Entities with build property values and return the configured parameters.
    */

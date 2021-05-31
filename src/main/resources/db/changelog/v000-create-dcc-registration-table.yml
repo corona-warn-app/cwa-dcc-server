@@ -49,6 +49,11 @@ databaseChangeLog:
                   constraints:
                     nullable: true
               - column:
+                  name: dcci
+                  type: varchar(64)
+                  constraints:
+                    nullable: false
+              - column:
                   name: encrypted_data_encryption_key
                   type: varchar(255)
                   constraints:
