@@ -30,9 +30,12 @@ import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.PrePersist;
+import javax.persistence.PreUpdate;
 import javax.persistence.Table;
 import javax.persistence.Version;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.NoArgsConstructor;
 
 /**
@@ -42,6 +45,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Entity
 @Table(name = "dcc_registration")
+@Builder
 public class DccRegistration implements Serializable {
 
   private static final long serialVersionUID = 1L;
@@ -103,5 +107,16 @@ public class DccRegistration implements Serializable {
   @Column(name = "error")
   @Enumerated(EnumType.STRING)
   private DccErrorReason error;
+
+  @PrePersist
+  public void prePersist() {
+    createdAt = LocalDateTime.now();
+    updatedAt = LocalDateTime.now();
+  }
+
+  @PreUpdate
+  public void update() {
+    updatedAt = LocalDateTime.now();
+  }
 
 }

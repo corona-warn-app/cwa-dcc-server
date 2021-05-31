@@ -21,8 +21,8 @@
 
 package app.coronawarn.dcc.client;
 
+import app.coronawarn.dcc.model.InternalTestResult;
 import app.coronawarn.dcc.model.RegistrationToken;
-import app.coronawarn.dcc.model.TestResult;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -46,5 +46,5 @@ public interface SigningApiClient {
     consumes = MediaType.APPLICATION_JSON_VALUE,
     produces = MediaType.APPLICATION_JSON_VALUE
   )
-  TestResult result(RegistrationToken registrationToken);
+  InternalTestResult result(RegistrationToken registrationToken);
 }

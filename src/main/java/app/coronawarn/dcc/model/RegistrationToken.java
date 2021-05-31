@@ -21,16 +21,11 @@
 
 package app.coronawarn.dcc.model;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
 import io.swagger.v3.oas.annotations.media.Schema;
-import javax.persistence.Transient;
-import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
 
 @Schema(
   description = "The registration token model."
@@ -43,9 +38,5 @@ public class RegistrationToken {
   @Pattern(regexp = "^[a-f0-9]{8}-[a-f0-9]{4}-4[a-f0-9]{3}-[89aAbB][a-f0-9]{3}-[a-f0-9]{12}$")
   @Schema(description = "registrationToken from Verification Server", required = true)
   private String registrationToken;
-
-  @JsonInclude(JsonInclude.Include.NON_NULL)
-  @Transient
-  private String responsePadding;
 
 }
