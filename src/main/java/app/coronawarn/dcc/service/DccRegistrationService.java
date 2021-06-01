@@ -91,6 +91,16 @@ public class DccRegistrationService {
   }
 
   /**
+   * Queries the database for a DCC Registration by RegistrationToken.
+   *
+   * @param registrationToken registrationToken to search for.
+   * @return Optional containing DCC Registration.
+   */
+  public Optional<DccRegistration> findByRegistrationToken(String registrationToken) {
+    return dccRegistrationRepository.findByRegistrationToken(registrationToken);
+  }
+
+  /**
    * Updates the DCC in the database with the given values.
    *
    * @param registration The Registration to update.

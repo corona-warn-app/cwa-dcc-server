@@ -23,6 +23,7 @@ package app.coronawarn.dcc.service;
 import app.coronawarn.dcc.client.SigningApiClient;
 import app.coronawarn.dcc.domain.DccErrorReason;
 import app.coronawarn.dcc.domain.DccRegistration;
+import com.upokecenter.cbor.CBORObject;
 import feign.FeignException;
 import java.util.Base64;
 import lombok.Getter;
@@ -64,6 +65,23 @@ public class DccService {
     dccRegistrationService.setDcc(registration, Base64.getEncoder().encodeToString(coseBytes));
 
     return registration;
+  }
+
+  /**
+   * Parses a COSE SIGN1_MESSAGE and replaces the payload Binary-String with a new Payload.
+   *
+   * @param dcc        the base64 encoded COSE SIGN1_MESSAGE
+   * @param newPayload the base64 encoded new payload
+   * @return base64 encoded COSE SIGN1_MESSAGE
+   */
+  public String replaceDccPayload(String dcc, String newPayload) {
+    byte[] newPayloadBytes = Base64.getDecoder().decode(newPayload);
+
+    CBORObject cbor = CBORObject.DecodeFromBytes(Base64.getDecoder().decode(dcc));
+    cbor.set(2, CBORObject.FromObject(newPayloadBytes));
+
+    return Base64.getEncoder().encodeToString(cbor.EncodeToBytes());
+
   }
 
   public static class DccGenerateException extends Exception {

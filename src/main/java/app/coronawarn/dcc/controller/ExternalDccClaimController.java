@@ -20,10 +20,14 @@
 
 package app.coronawarn.dcc.controller;
 
+import app.coronawarn.dcc.domain.DccRegistration;
+import app.coronawarn.dcc.exception.DccServerException;
+import app.coronawarn.dcc.model.DccDownloadResponse;
 import app.coronawarn.dcc.model.DccResponse;
 import app.coronawarn.dcc.model.DccUnexpectedError;
 import app.coronawarn.dcc.model.RegistrationToken;
-import app.coronawarn.dcc.model.UploadPublicKeyRequest;
+import app.coronawarn.dcc.service.DccRegistrationService;
+import app.coronawarn.dcc.service.DccService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.enums.ParameterIn;
@@ -31,6 +35,7 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Profile;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -43,7 +48,12 @@ import org.springframework.web.bind.annotation.RestController;
 @Profile("external")
 @RestController
 @RequestMapping("/version/v1/dcc")
+@RequiredArgsConstructor
 public class ExternalDccClaimController {
+
+  private final DccRegistrationService dccRegistrationService;
+
+  private final DccService dccService;
 
   @Operation(
     summary = "COVID-19 Test Result DCC Components",
@@ -67,7 +77,6 @@ public class ExternalDccClaimController {
         responseCode = "404",
         description = "Registration Token does not exist/ is not registered at DCC-Server."),
       @ApiResponse(responseCode = "410", description = "DCC already cleaned up."),
-      @ApiResponse(responseCode = "412", description = "TestResult not yet received."),
       @ApiResponse(
         responseCode = "500",
         description = "Internal Server Error",
@@ -76,10 +85,32 @@ public class ExternalDccClaimController {
           schema = @Schema(implementation = DccUnexpectedError.class)))
     })
   @PostMapping("")
-  public ResponseEntity<Void> claimDcc(
-    @RequestHeader("cwa-fake") String cwaFake,
-    @org.springframework.web.bind.annotation.RequestBody UploadPublicKeyRequest requestBody) {
+  public ResponseEntity<DccDownloadResponse> claimDcc(
+    @RequestHeader(value = "cwa-fake", required = false) String cwaFake,
+    @org.springframework.web.bind.annotation.RequestBody RegistrationToken registrationToken) {
 
-    return ResponseEntity.status(HttpStatus.OK).build();
+    // RegistrationToken not found
+    DccRegistration dccRegistration =
+      dccRegistrationService.findByRegistrationToken(registrationToken.getRegistrationToken()).orElseThrow
+        (() -> new DccServerException(HttpStatus.NOT_FOUND,
+          "Registration Token does not exist/ is not registered at DCC-Server."));
+
+    // DCC Pending
+    if (dccRegistration.getEncryptedDataEncryptionKey() == null && dccRegistration.getDcc() == null) {
+      return ResponseEntity.status(HttpStatus.ACCEPTED).build();
+    }
+
+    // DCC already cleaned up
+    if (dccRegistration.getEncryptedDataEncryptionKey() != null && dccRegistration.getDcc() == null) {
+      throw new DccServerException(HttpStatus.GONE, "DCC already cleaned up.");
+    }
+
+    dccRegistration.setDcc(
+      dccService.replaceDccPayload(dccRegistration.getDcc(), dccRegistration.getDccEncryptedPayload()));
+
+    return ResponseEntity.status(HttpStatus.OK).body(new DccDownloadResponse(
+      dccRegistration.getEncryptedDataEncryptionKey(),
+      dccRegistration.getDcc()
+    ));
   }
 }
