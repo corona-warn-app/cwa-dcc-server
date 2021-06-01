@@ -22,11 +22,12 @@ package app.coronawarn.dcc.controller;
 
 import app.coronawarn.dcc.domain.DccRegistration;
 import app.coronawarn.dcc.model.LabPublicKeyInfo;
-import app.coronawarn.dcc.model.UploadPublicKeyRequest;
+import app.coronawarn.dcc.model.DccUploadRequest;
 import app.coronawarn.dcc.service.DccRegistrationService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.enums.ParameterIn;
+import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.parameters.RequestBody;
@@ -35,6 +36,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Profile;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -59,9 +61,13 @@ public class InternalPublicKeyController {
     parameters = {
       @Parameter(name = "labId", in = ParameterIn.PATH, description = "ID of the laboratory to search for.")
     },
-    requestBody = @RequestBody(content = @Content(schema = @Schema(implementation = UploadPublicKeyRequest.class))),
     responses = {
-      @ApiResponse(responseCode = "200", description = "Public Key list returned."),
+      @ApiResponse(
+        responseCode = "200",
+        description = "Public Key list returned.",
+        content = @Content(
+          mediaType = MediaType.APPLICATION_JSON_VALUE,
+          array = @ArraySchema(schema = @Schema(implementation = LabPublicKeyInfo.class)))),
       @ApiResponse(responseCode = "500", description = "Internal Server Error")
     })
   @GetMapping("/search/{labId}")

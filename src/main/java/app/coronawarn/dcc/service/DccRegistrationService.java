@@ -21,6 +21,7 @@
 package app.coronawarn.dcc.service;
 
 import app.coronawarn.dcc.client.VerificationServerClient;
+import app.coronawarn.dcc.domain.DccErrorReason;
 import app.coronawarn.dcc.domain.DccRegistration;
 import app.coronawarn.dcc.model.InternalTestResult;
 import app.coronawarn.dcc.model.LabTestResult;
@@ -69,8 +70,65 @@ public class DccRegistrationService {
     log.info("Saved new DCC Registration for RegistrationToken {}", registrationToken);
   }
 
+  /**
+   * Queires the database for DCC Registrations by Lab ID.
+   *
+   * @param labId labId to search for.
+   * @return List of matching DCC Registrations.
+   */
   public List<DccRegistration> findByLabId(String labId) {
     return dccRegistrationRepository.findByLabId(labId);
+  }
+
+  /**
+   * Queries the database for a DCC Registration by Hashed GUID aka Test ID.
+   *
+   * @param hashedGuid hashedGuid to search for.
+   * @return Optional containing DCC Registration.
+   */
+  public Optional<DccRegistration> findByHashedGuid(String hashedGuid) {
+    return dccRegistrationRepository.findByHashedGuid(hashedGuid);
+  }
+
+  /**
+   * Updates the DCC in the database with the given values.
+   *
+   * @param registration The Registration to update.
+   * @param dccHash      the hash of the plain data
+   * @param encryptedDcc the DCC encrypted with
+   * @param encryptedDek the encrypted Data Encryption Key.
+   * @return
+   */
+  public DccRegistration updateDccRegistration(
+    DccRegistration registration, String dccHash, String encryptedDcc, String encryptedDek) {
+
+    registration.setDccHash(dccHash);
+    registration.setDccEncryptedPayload(encryptedDcc);
+    registration.setEncryptedDataEncryptionKey(encryptedDek);
+
+    return dccRegistrationRepository.save(registration);
+  }
+
+  /**
+   * Sets the Error Property on a DCC Registration and saves it into DB.
+   *
+   * @param registration The target DCC Registration
+   * @param reason       the new Error Reason
+   */
+  public void setError(DccRegistration registration, DccErrorReason reason) {
+    registration.setError(reason);
+    dccRegistrationRepository.save(registration);
+  }
+
+  /**
+   * Sets the DCC Property on a DCC Registration and saves it into DB.
+   *
+   * @param registration The target DCC Registration
+   * @param dcc       the base64 encoded DCC
+   */
+  public void setDcc(DccRegistration registration, String dcc) {
+    registration.setDcc(dcc);
+    dccRegistrationRepository.save(registration);
   }
 
   private void checkRegistrationTokenAlreadyExists(String registrationToken) throws DccRegistrationException {

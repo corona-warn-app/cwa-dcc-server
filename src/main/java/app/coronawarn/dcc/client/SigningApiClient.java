@@ -20,11 +20,10 @@
 
 package app.coronawarn.dcc.client;
 
-import app.coronawarn.dcc.model.InternalTestResult;
-import app.coronawarn.dcc.model.RegistrationToken;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 
 /**
  * This class represents the Verification Server Feign client.
@@ -36,14 +35,14 @@ import org.springframework.web.bind.annotation.PostMapping;
 public interface SigningApiClient {
 
   /**
-   * This method gets a testResult from the LabServer.
+   * This method gets a COSE from UBirch API for a DCC.
    *
-   * @param registrationToken for TestResult
-   * @return TestResult from server
+   * @param hash of unencrypted DCC.
+   * @return Signed COSE from UBirch API
    */
-  @PostMapping(value = "/version/v1/testresult",
-    consumes = MediaType.APPLICATION_JSON_VALUE,
-    produces = MediaType.APPLICATION_JSON_VALUE
+  @PostMapping(value = "/api/certify/v2/issue/hash",
+    consumes = MediaType.TEXT_PLAIN_VALUE,
+    produces = MediaType.APPLICATION_CBOR_VALUE
   )
-  InternalTestResult result(RegistrationToken registrationToken);
+  byte[] sign(@RequestBody String hash);
 }

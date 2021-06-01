@@ -1,0 +1,80 @@
+/*-
+ * ---license-start
+ * Corona-Warn-App / cwa-dcc
+ * ---
+ * Copyright (C) 2020 - 2021 T-Systems International GmbH and all other contributors
+ * ---
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ * ---license-end
+ */
+
+package app.coronawarn.dcc.service;
+
+import app.coronawarn.dcc.client.SigningApiClient;
+import app.coronawarn.dcc.domain.DccErrorReason;
+import app.coronawarn.dcc.domain.DccRegistration;
+import feign.FeignException;
+import java.util.Base64;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
+import org.springframework.security.crypto.codec.Hex;
+import org.springframework.stereotype.Service;
+
+@Service
+@RequiredArgsConstructor
+@Slf4j
+public class DccService {
+
+  private final DccRegistrationService dccRegistrationService;
+
+  private final SigningApiClient signingApiClient;
+
+  public DccRegistration sign(DccRegistration registration) throws DccGenerateException {
+
+    byte[] coseBytes;
+    try {
+      byte[] hashBytes = Hex.decode(registration.getDccHash());
+      String hashBase64 = Base64.getEncoder().encodeToString(hashBytes);
+
+      coseBytes = signingApiClient.sign(hashBase64);
+    } catch (FeignException e) {
+      log.error("Failed to sign DCC. Http Status Code: {}, Message: {}", e.status(), e.getMessage());
+
+      if (e.status() > 0 && HttpStatus.valueOf(e.status()).is4xxClientError()) {
+        dccRegistrationService.setError(registration, DccErrorReason.SIGNING_CLIENT_ERROR);
+        throw new DccGenerateException(DccErrorReason.SIGNING_CLIENT_ERROR);
+      } else {
+        dccRegistrationService.setError(registration, DccErrorReason.SIGNING_SERVER_ERROR);
+        throw new DccGenerateException(DccErrorReason.SIGNING_SERVER_ERROR);
+      }
+    }
+
+    dccRegistrationService.setDcc(registration, Base64.getEncoder().encodeToString(coseBytes));
+
+    return registration;
+  }
+
+  public static class DccGenerateException extends Exception {
+
+    @Getter
+    DccErrorReason reason;
+
+    DccGenerateException(DccErrorReason reason) {
+      super();
+      this.reason = reason;
+    }
+  }
+
+}

@@ -18,20 +18,23 @@
  * ---license-end
  */
 
-package app.coronawarn.dcc.repository;
+package app.coronawarn.dcc.model;
 
-import app.coronawarn.dcc.domain.DccRegistration;
-import java.util.List;
-import java.util.Optional;
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.stereotype.Repository;
+import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
-@Repository
-public interface DccRegistrationRepository extends JpaRepository<DccRegistration, Long> {
+@Schema(
+  description = "Response for uploaded DCC data."
+)
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+public class DccUploadResponse {
 
-  Optional<DccRegistration> findByRegistrationToken(String registrationToken);
+  @Schema(description = "Base64 encoded DCC Structure without the payload."
+    + " (COSE/CBOR, Payload needs to be replaced by laboratory)")
+  private String partialDcc;
 
-  List<DccRegistration> findByLabId(String labId);
-
-  Optional<DccRegistration> findByHashedGuid(String hashedGuid);
 }

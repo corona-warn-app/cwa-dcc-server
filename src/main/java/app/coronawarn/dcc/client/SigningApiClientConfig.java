@@ -26,6 +26,7 @@ import feign.Client;
 import feign.httpclient.ApacheHttpClient;
 import java.io.IOException;
 import java.security.GeneralSecurityException;
+import java.util.Collections;
 import javax.net.ssl.HostnameVerifier;
 import javax.net.ssl.SSLContext;
 import lombok.RequiredArgsConstructor;
@@ -33,9 +34,11 @@ import org.apache.http.HttpHost;
 import org.apache.http.conn.ssl.DefaultHostnameVerifier;
 import org.apache.http.conn.ssl.NoopHostnameVerifier;
 import org.apache.http.impl.client.HttpClientBuilder;
+import org.apache.http.message.BasicHeader;
 import org.apache.http.ssl.SSLContextBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.util.ResourceUtils;
 
@@ -63,6 +66,12 @@ public class SigningApiClientConfig {
       httpClientBuilder.setProxy(new HttpHost(
         config.getSigningApiServer().getProxy().getHost(),
         config.getSigningApiServer().getProxy().getPort()
+      ));
+    }
+
+    if (config.getSigningApiServer().getApiKey() != null) {
+      httpClientBuilder.setDefaultHeaders(Collections.singletonList(
+        new BasicHeader(HttpHeaders.AUTHORIZATION, "Bearer " + config.getSigningApiServer().getApiKey())
       ));
     }
 
