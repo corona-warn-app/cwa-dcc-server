@@ -32,7 +32,7 @@ import org.springframework.web.bind.annotation.PostMapping;
  */
 @FeignClient(
   name = "verificationServerClient",
-  url = "${cwa.dcc.verificationserver.baseurl}",
+  url = "${cwa.dcc.verification-server.base-url}",
   configuration = VerificationServerClientConfig.class)
 public interface VerificationServerClient {
 
