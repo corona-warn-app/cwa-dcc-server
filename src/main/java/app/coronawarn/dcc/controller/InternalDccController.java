@@ -45,6 +45,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -87,7 +88,7 @@ public class InternalDccController {
       @ApiResponse(responseCode = "404", description = "Test does not exists"),
       @ApiResponse(responseCode = "500", description = "Internal Server Error")
     })
-  @GetMapping("/{testId}/dcc")
+  @PostMapping("/{testId}/dcc")
   public ResponseEntity<DccUploadResponse> uploadDcc(
     @Valid @Pattern(regexp = "^[XxA-Fa-f0-9]([A-Fa-f0-9]{63})$") @PathVariable("testId") String testId,
     @Valid @org.springframework.web.bind.annotation.RequestBody DccUploadRequest uploadRequest) {
