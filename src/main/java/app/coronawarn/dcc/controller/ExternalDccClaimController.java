@@ -55,6 +55,9 @@ public class ExternalDccClaimController {
 
   private final DccService dccService;
 
+  /**
+   * Endpoint to download DCC.
+   */
   @Operation(
     summary = "COVID-19 Test Result DCC Components",
     description = "Gets the components to build a Digital Covid Certificate with the result of COVID-19 Test.",
@@ -91,8 +94,8 @@ public class ExternalDccClaimController {
 
     // RegistrationToken not found
     DccRegistration dccRegistration =
-      dccRegistrationService.findByRegistrationToken(registrationToken.getRegistrationToken()).orElseThrow
-        (() -> new DccServerException(HttpStatus.NOT_FOUND,
+      dccRegistrationService.findByRegistrationToken(registrationToken.getRegistrationToken()).orElseThrow(
+        () -> new DccServerException(HttpStatus.NOT_FOUND,
           "Registration Token does not exist/ is not registered at DCC-Server."));
 
     // DCC Pending

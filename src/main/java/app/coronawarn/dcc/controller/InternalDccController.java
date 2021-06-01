@@ -96,7 +96,7 @@ public class InternalDccController {
       () -> new DccServerException(HttpStatus.NOT_FOUND, "Test does not exists"));
 
     // Check whether this DCC will be updated or newly created.
-    boolean updated = dccRegistration.getDcc() != null;
+    final boolean updated = dccRegistration.getDcc() != null;
 
     try {
       Base64.getDecoder().decode(uploadRequest.getDataEncryptionKey());

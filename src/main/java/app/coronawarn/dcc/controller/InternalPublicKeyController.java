@@ -22,7 +22,6 @@ package app.coronawarn.dcc.controller;
 
 import app.coronawarn.dcc.domain.DccRegistration;
 import app.coronawarn.dcc.model.LabPublicKeyInfo;
-import app.coronawarn.dcc.model.DccUploadRequest;
 import app.coronawarn.dcc.service.DccRegistrationService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -30,7 +29,6 @@ import io.swagger.v3.oas.annotations.enums.ParameterIn;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
-import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import java.util.List;
 import java.util.stream.Collectors;

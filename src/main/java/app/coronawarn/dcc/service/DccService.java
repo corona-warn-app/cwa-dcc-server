@@ -42,6 +42,15 @@ public class DccService {
 
   private final SigningApiClient signingApiClient;
 
+  /**
+   * Creates signed data for a DCCRegistration.
+   * This Endpoints queries the SigningAPI and signs the hash assigned to this Registration.
+   * The resulting partialDCC will bestored in DCCRegistration.
+   *
+   * @param registration the DccRegistration to sign the DCC for.
+   * @return DccRegistration
+   * @throws DccGenerateException if signing went wrong.
+   */
   public DccRegistration sign(DccRegistration registration) throws DccGenerateException {
 
     byte[] coseBytes;

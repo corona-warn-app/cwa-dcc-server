@@ -53,6 +53,13 @@ public class DccRegistrationService {
 
   private final DcciGeneratorService dcciGeneratorService;
 
+  /**
+   * Create a new DCC registration with a RegistrationToken and a PublicKey.
+   *
+   * @param registrationToken the registrationToken to use.
+   * @param publicKey         the PublicKey to use.
+   * @throws DccRegistrationException if Creation went wrong.
+   */
   public void createDccRegistration(String registrationToken, PublicKey publicKey) throws DccRegistrationException {
     checkRegistrationTokenAlreadyExists(registrationToken);
     InternalTestResult testResult = checkRegistrationTokenIsValid(registrationToken);
@@ -134,7 +141,7 @@ public class DccRegistrationService {
    * Sets the DCC Property on a DCC Registration and saves it into DB.
    *
    * @param registration The target DCC Registration
-   * @param dcc       the base64 encoded DCC
+   * @param dcc          the base64 encoded DCC
    */
   public void setDcc(DccRegistration registration, String dcc) {
     registration.setDcc(dcc);
