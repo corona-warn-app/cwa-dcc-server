@@ -31,10 +31,10 @@ cwa:
     verification-server:
       enable-mtls: true
       base-url: ${CWA_DCC_VERIFICATIONSERVER_BASEURL}
-      key-store-path: ${CWA_DCC_SIGNINGAPISERVER_TRUSTSTOREPATH}
-      key-store-password: ${CWA_DCC_SIGNINGAPISERVER_TRUSTSTOREPASSWORD}
-      trust-store-password: ${CWA_DCC_SIGNINGAPISERVER_TRUSTSTOREPASSWORD}
-      trust-store-path: ${CWA_DCC_SIGNINGAPISERVER_TRUSTSTOREPATH}
+      key-store-path: ${CWA_DCC_VERIFICATIONSERVER_KEYSTOREPATH}
+      key-store-password: ${CWA_DCC_VERIFICATIONSERVER_KEYSTOREPASSWORD}
+      trust-store-path: ${CWA_DCC_VERIFICATIONSERVER_TRUSTSTOREPATH}
+      trust-store-password: ${CWA_DCC_VERIFICATIONSERVER_TRUSTSTOREPASSWORD}
       verify-hostnames: false
     signing-api-server:
       enable-mtls: true
