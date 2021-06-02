@@ -30,6 +30,7 @@ import java.util.Collections;
 import javax.net.ssl.HostnameVerifier;
 import javax.net.ssl.SSLContext;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.http.HttpHost;
 import org.apache.http.conn.ssl.DefaultHostnameVerifier;
 import org.apache.http.conn.ssl.NoopHostnameVerifier;
@@ -44,6 +45,7 @@ import org.springframework.util.ResourceUtils;
 
 @Configuration
 @RequiredArgsConstructor
+@Slf4j
 public class SigningApiClientConfig {
 
   private final DccApplicationConfig config;
@@ -93,6 +95,9 @@ public class SigningApiClientConfig {
 
       return builder.build();
     } catch (IOException | GeneralSecurityException e) {
+      log.error("The SSL context for Signing Server could not be loaded. Exception: {} {}",
+        e.getClass().getSimpleName(), e.getMessage());
+
       throw new DccServerException(HttpStatus.INTERNAL_SERVER_ERROR,
         "The SSL context for Signing Server could not be loaded.");
     }
