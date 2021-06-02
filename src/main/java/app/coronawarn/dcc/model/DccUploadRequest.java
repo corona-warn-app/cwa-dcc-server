@@ -20,21 +20,39 @@
 
 package app.coronawarn.dcc.model;
 
-import app.coronawarn.dcc.domain.DccErrorReason;
 import io.swagger.v3.oas.annotations.media.Schema;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Schema(
-  description = "The DCC Unexpected Error model. Holds the error which has occured during creation of DCC."
+  description = "Request payload to upload a DCC from laboratory."
 )
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class DccUnexpectedError {
+public class DccUploadRequest {
 
-  @Schema(description = "Reason of failure.")
-  private DccErrorReason reason;
+  @Schema(description = "SHA256 Hash of plain DCC payload.")
+  @Pattern(regexp = "^[A-Fa-f0-9]{64}$")
+  private String dccHash;
+
+  @Schema(description = "Base64 encoded encrypted DCC payload.")
+  @Pattern(regexp = "^[A-Za-z0-9+/=]*$")
+  @Size(max = 1000)
+  @NotNull
+  @NotEmpty
+  private String encryptedDcc;
+
+  @Schema(description = "Base64 encoded with PublicKey encrypted Data Encryption Key for encrypted DCC.")
+  @Pattern(regexp = "^[A-Za-z0-9+/=]*$")
+  @Size(max = 255)
+  @NotNull
+  @NotEmpty
+  private String dataEncryptionKey;
 
 }

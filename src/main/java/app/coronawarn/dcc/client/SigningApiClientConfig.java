@@ -1,22 +1,21 @@
-/*
+/*-
+ * ---license-start
  * Corona-Warn-App / cwa-dcc
- *
- * (C) 2020, T-Systems International GmbH
- *
- * Deutsche Telekom AG and all other contributors /
- * copyright owners license this file to you under the Apache
- * License, Version 2.0 (the "License"); you may not use this
- * file except in compliance with the License.
+ * ---
+ * Copyright (C) 2020 - 2021 T-Systems International GmbH and all other contributors
+ * ---
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- * http://www.apache.org/licenses/LICENSE-2.0
+ *      http://www.apache.org/licenses/LICENSE-2.0
  *
- * Unless required by applicable law or agreed to in writing,
- * software distributed under the License is distributed on an
- * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
- * KIND, either express or implied.  See the License for the
- * specific language governing permissions and limitations
- * under the License.
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ * ---license-end
  */
 
 package app.coronawarn.dcc.client;
@@ -27,6 +26,7 @@ import feign.Client;
 import feign.httpclient.ApacheHttpClient;
 import java.io.IOException;
 import java.security.GeneralSecurityException;
+import java.util.Collections;
 import javax.net.ssl.HostnameVerifier;
 import javax.net.ssl.SSLContext;
 import lombok.RequiredArgsConstructor;
@@ -34,9 +34,11 @@ import org.apache.http.HttpHost;
 import org.apache.http.conn.ssl.DefaultHostnameVerifier;
 import org.apache.http.conn.ssl.NoopHostnameVerifier;
 import org.apache.http.impl.client.HttpClientBuilder;
+import org.apache.http.message.BasicHeader;
 import org.apache.http.ssl.SSLContextBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.util.ResourceUtils;
 
@@ -64,6 +66,12 @@ public class SigningApiClientConfig {
       httpClientBuilder.setProxy(new HttpHost(
         config.getSigningApiServer().getProxy().getHost(),
         config.getSigningApiServer().getProxy().getPort()
+      ));
+    }
+
+    if (config.getSigningApiServer().getApiKey() != null) {
+      httpClientBuilder.setDefaultHeaders(Collections.singletonList(
+        new BasicHeader(HttpHeaders.AUTHORIZATION, "Bearer " + config.getSigningApiServer().getApiKey())
       ));
     }
 

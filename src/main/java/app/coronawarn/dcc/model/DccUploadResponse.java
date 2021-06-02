@@ -20,21 +20,21 @@
 
 package app.coronawarn.dcc.model;
 
-import app.coronawarn.dcc.domain.DccErrorReason;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Schema(
-  description = "The DCC Unexpected Error model. Holds the error which has occured during creation of DCC."
+  description = "Response for uploaded DCC data."
 )
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class DccUnexpectedError {
+public class DccUploadResponse {
 
-  @Schema(description = "Reason of failure.")
-  private DccErrorReason reason;
+  @Schema(description = "Base64 encoded DCC Structure without the payload."
+    + " (COSE/CBOR, Payload needs to be replaced by laboratory)")
+  private String partialDcc;
 
 }

@@ -18,23 +18,34 @@
  * ---license-end
  */
 
+
 package app.coronawarn.dcc.model;
 
-import app.coronawarn.dcc.domain.DccErrorReason;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+
+/**
+ * This class represents the TestResult.
+ *
+ * @see <a href="https://github.com/corona-warn-app/cwa-testresult-server/blob/master/docs/architecture-overview.md#core-entities">Core Entities</a>
+ */
 @Schema(
-  description = "The DCC Unexpected Error model. Holds the error which has occured during creation of DCC."
+  description = "The internal test result model."
 )
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class DccUnexpectedError {
+public class InternalTestResult {
 
-  @Schema(description = "Reason of failure.")
-  private DccErrorReason reason;
+  private int testResult;
+
+  private String labId;
+
+  private String testId;
+
+  private long sc;
 
 }

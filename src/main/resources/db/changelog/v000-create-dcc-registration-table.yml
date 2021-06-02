@@ -37,10 +37,10 @@ databaseChangeLog:
                   name: lab_id
                   type: varchar(100)
                   constraints:
-                    nullable: false
+                    nullable: true
               - column:
                   name: registration_token
-                  type: varchar(32)
+                  type: varchar(36)
                   constraints:
                     nullable: false
               - column:
@@ -48,6 +48,11 @@ databaseChangeLog:
                   type: varchar(1000)
                   constraints:
                     nullable: true
+              - column:
+                  name: dcci
+                  type: varchar(50)
+                  constraints:
+                    nullable: false
               - column:
                   name: encrypted_data_encryption_key
                   type: varchar(255)

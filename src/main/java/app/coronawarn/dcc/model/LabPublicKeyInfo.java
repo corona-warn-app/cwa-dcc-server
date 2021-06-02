@@ -20,21 +20,24 @@
 
 package app.coronawarn.dcc.model;
 
-import app.coronawarn.dcc.domain.DccErrorReason;
 import io.swagger.v3.oas.annotations.media.Schema;
-import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 @Schema(
-  description = "The DCC Unexpected Error model. Holds the error which has occured during creation of DCC."
+  description = "Information a lab receives when searching for PublicKeys"
 )
 @Data
-@NoArgsConstructor
-@AllArgsConstructor
-public class DccUnexpectedError {
+public class LabPublicKeyInfo {
 
-  @Schema(description = "Reason of failure.")
-  private DccErrorReason reason;
+  @Schema(description = "Hashed GUID of the test.")
+  private String testId;
+
+  @Schema(description = "The DCCI of the to be created DCC.")
+  private String dcci;
+
+  @Schema(
+    description = "The PublicKey to encrypt the Data Encryption Key with.",
+    format = "Base64 encoded X509 SubjectPublicKeyInformation Object (RSA or EC Key)")
+  private String publicKey;
 
 }

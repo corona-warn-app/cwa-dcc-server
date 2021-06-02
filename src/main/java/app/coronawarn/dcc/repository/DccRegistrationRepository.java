@@ -18,23 +18,20 @@
  * ---license-end
  */
 
-package app.coronawarn.dcc.model;
+package app.coronawarn.dcc.repository;
 
-import app.coronawarn.dcc.domain.DccErrorReason;
-import io.swagger.v3.oas.annotations.media.Schema;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import app.coronawarn.dcc.domain.DccRegistration;
+import java.util.List;
+import java.util.Optional;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
-@Schema(
-  description = "The DCC Unexpected Error model. Holds the error which has occured during creation of DCC."
-)
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
-public class DccUnexpectedError {
+@Repository
+public interface DccRegistrationRepository extends JpaRepository<DccRegistration, Long> {
 
-  @Schema(description = "Reason of failure.")
-  private DccErrorReason reason;
+  Optional<DccRegistration> findByRegistrationToken(String registrationToken);
 
+  List<DccRegistration> findByLabId(String labId);
+
+  Optional<DccRegistration> findByHashedGuid(String hashedGuid);
 }
