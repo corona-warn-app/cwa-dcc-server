@@ -22,23 +22,28 @@ server:
       TLS_AES_128_GCM_SHA256
       TLS_AES_256_GCM_SHA384
       TLS_AES_128_CCM_SHA256
-    key-store: ${SSL_VERIFICATION_KEYSTORE_PATH}
-    key-store-password: ${SSL_VERIFICATION_KEYSTORE_PASSWORD}
-    trust-store:  ${SSL_VERIFICATION_TRUSTSTORE_PATH}
-    trust-store-password: ${SSL_VERIFICATION_TRUSTSTORE_PASSWORD}
+    key-store: ${SERVER_SSL_KEYSTORE}
+    key-store-password: ${SERVER_SSL_KEYSTOREPASSWORD}
+    trust-store:  ${SERVER_SSL_TRUSTSTORE}
+    trust-store-password: ${SERVER_SSL_TRUSTSTOREPASSWORD}
 cwa:
   dcc:
     verification-server:
       enable-mtls: true
-      base-url:
+      base-url: ${CWA_DCC_VERIFICATIONSERVER_BASEURL}
+      key-store-path: ${CWA_DCC_SIGNINGAPISERVER_TRUSTSTOREPATH}
+      key-store-password: ${CWA_DCC_SIGNINGAPISERVER_TRUSTSTOREPASSWORD}
+      trust-store-password: ${CWA_DCC_SIGNINGAPISERVER_TRUSTSTOREPASSWORD}
+      trust-store-path: ${CWA_DCC_SIGNINGAPISERVER_TRUSTSTOREPATH}
+      verify-hostnames: false
     signing-api-server:
       enable-mtls: true
-      base-url:
-      key-store-path: classpath:keystore.jks
-      key-store-password: changeit
-      trust-store-password: classpath:truststore.jks
-      trust-store-path: changeit
-      api-key:
+      base-url: ${CWA_DCC_SIGNINGAPISERVER_BASEURL}
+      key-store-path: ${CWA_DCC_SIGNINGAPISERVER_KEYSTOREPATH}
+      key-store-password: ${CWA_DCC_SIGNINGAPISERVER_KEYSTOREPASSWORD}
+      trust-store-password: ${CWA_DCC_SIGNINGAPISERVER_TRUSTSTOREPASSWORD}
+      trust-store-path: ${CWA_DCC_SIGNINGAPISERVER_TRUSTSTOREPATH}
+      api-key: ${CWA_DCC_SIGNINGAPISERVER_APIKEY}
       verify-hostnames: true
     request:
       sizelimit: 10000

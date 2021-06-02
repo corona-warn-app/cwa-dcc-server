@@ -14,7 +14,7 @@ spring:
         enabled: true
         backend: ${VAULT_BACKEND}
         profile-separator: '/'
-        application-name: 'cwa-dcc-server'
+        application-name: 'cwa-dcc-verification'
         default-context: ''
         profiles: cloud
       fail-fast: true
