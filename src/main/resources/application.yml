@@ -67,10 +67,11 @@ cwa:
       verify-hostnames: true
     request:
       sizelimit: 10000
-    entities:
-      cleanup:
-        days: 21
-        rate: 1800000
+    cleanup:
+      dcc-data: 4
+      registration-token: 21
+      entity: 180
+      rate: 600000
 
 springdoc:
   api-docs:

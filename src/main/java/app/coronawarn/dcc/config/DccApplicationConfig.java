@@ -36,7 +36,7 @@ public class DccApplicationConfig {
 
   private Long fakeDelayMovingAverageSamples;
 
-  private Entities entities = new Entities();
+  private Cleanup cleanup = new Cleanup();
   private Request request = new Request();
 
   private MtlsConfiguration verificationServer = new MtlsConfiguration();
@@ -45,25 +45,32 @@ public class DccApplicationConfig {
   private String dcciPrefix;
 
   /**
-   * Configure the Entities with build property values and return the configured parameters.
+   * Entity Cleanup configuration.
    */
   @Getter
   @Setter
-  public static class Entities {
-
-    private Cleanup cleanup = new Cleanup();
+  public static class Cleanup {
 
     /**
-     * Configure the Cleanup with build property values and return the configured parameters.
+     * Lifespan of DCC Data in days since last entity update.
+     * (PublicKey, DEK, Encrypted Payload, DCC, ERROR, Hashed GUID)
      */
-    @Getter
-    @Setter
-    public static class Cleanup {
+    private int dccData = 4;
 
-      private int days = 21;
-      private int rate = 60000;
-    }
+    /**
+     * Lifespan of RegistrationToken in days since entity creation.
+     */
+    private int registrationToken = 21;
 
+    /**
+     * Lifespan of whole entity in days since last entity update.
+     */
+    private int entity = 180;
+
+    /**
+     * Wait time between Cleanup Cycles in ms.
+     */
+    private int rate = 60000;
   }
 
   /**

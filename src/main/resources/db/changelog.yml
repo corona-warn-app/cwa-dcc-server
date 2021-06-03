@@ -2,3 +2,9 @@ databaseChangeLog:
   - include:
       file: changelog/v000-create-dcc-registration-table.yml
       relativeToChangelogFile: true
+  - include:
+      file: changelog/v001-create-shedlock-table.yml
+      relativeToChangelogFile: true
+  - include:
+      file: changelog/v002-allow-null-for-registration-token.yml
+      relativeToChangelogFile: true
