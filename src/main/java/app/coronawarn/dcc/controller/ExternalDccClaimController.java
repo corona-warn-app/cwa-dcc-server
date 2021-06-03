@@ -99,12 +99,12 @@ public class ExternalDccClaimController {
           "Registration Token does not exist/ is not registered at DCC-Server."));
 
     // DCC Pending
-    if (dccRegistration.getEncryptedDataEncryptionKey() == null && dccRegistration.getDcc() == null) {
+    if (dccRegistration.getDccHash() == null && dccRegistration.getDcc() == null) {
       return ResponseEntity.status(HttpStatus.ACCEPTED).build();
     }
 
     // DCC already cleaned up
-    if (dccRegistration.getEncryptedDataEncryptionKey() != null && dccRegistration.getDcc() == null) {
+    if (dccRegistration.getDccHash() != null && dccRegistration.getDcc() == null) {
       throw new DccServerException(HttpStatus.GONE, "DCC already cleaned up.");
     }
 

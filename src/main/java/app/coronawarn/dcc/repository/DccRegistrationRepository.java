@@ -31,7 +31,7 @@ public interface DccRegistrationRepository extends JpaRepository<DccRegistration
 
   Optional<DccRegistration> findByRegistrationToken(String registrationToken);
 
-  List<DccRegistration> findByLabId(String labId);
+  List<DccRegistration> findByLabIdAndDccHashIsNull(String labId);
 
   Optional<DccRegistration> findByHashedGuid(String hashedGuid);
 }

@@ -78,13 +78,13 @@ public class DccRegistrationService {
   }
 
   /**
-   * Queires the database for DCC Registrations by Lab ID.
+   * Queries the database for DCC Registrations without signed DCC by Lab ID.
    *
    * @param labId labId to search for.
    * @return List of matching DCC Registrations.
    */
-  public List<DccRegistration> findByLabId(String labId) {
-    return dccRegistrationRepository.findByLabId(labId);
+  public List<DccRegistration> findPendingDccByLabId(String labId) {
+    return dccRegistrationRepository.findByLabIdAndDccHashIsNull(labId);
   }
 
   /**
