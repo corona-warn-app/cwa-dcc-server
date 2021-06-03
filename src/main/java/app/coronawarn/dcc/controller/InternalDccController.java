@@ -69,8 +69,8 @@ public class InternalDccController {
     tags = {"internal"},
     parameters = {
       @Parameter(name = "testId", in = ParameterIn.PATH, description = "ID of the test (hashed GUID)."),
-      @Parameter(name = "partnerId", in = ParameterIn.HEADER, description = "PartnerID. This needs only to be set if"
-        + " DCC-Server is contacted without DCC-Proxy in between.")
+      @Parameter(name = "X-CWA-PARTNER-ID", in = ParameterIn.HEADER, description = "PartnerID. This needs only to be"
+        + " set if DCC-Server is contacted without DCC-Proxy in between.")
     },
     requestBody = @RequestBody(content = @Content(schema = @Schema(implementation = DccUploadRequest.class))),
     responses = {
@@ -88,7 +88,7 @@ public class InternalDccController {
   @PostMapping("/{testId}/dcc")
   public ResponseEntity<DccUploadResponse> uploadDcc(
     @Valid @Pattern(regexp = "^[XxA-Fa-f0-9]([A-Fa-f0-9]{63})$") @PathVariable("testId") String testId,
-    @Valid @Pattern(regexp = "^[A-Fa-f0-9]{64}$") @RequestHeader("X-CWA-PARTNER-ID") String partnerId,
+    @Valid @Pattern(regexp = "^[A-Za-z0-9]{1,64}$") @RequestHeader("X-CWA-PARTNER-ID") String partnerId,
     @Valid @org.springframework.web.bind.annotation.RequestBody DccUploadRequest uploadRequest) {
 
     DccRegistration dccRegistration = dccRegistrationService.findByHashedGuid(testId).orElseThrow(
