@@ -1,0 +1,13 @@
+databaseChangeLog:
+  - changeSet:
+      id: add-partner-id-column
+      author: f11h
+      changes:
+        - addColumn:
+            tableName: dcc_registration
+            columns:
+              - column:
+                  name: partner_id
+                  type: varchar(64)
+                  constraints:
+                    nullable: true
