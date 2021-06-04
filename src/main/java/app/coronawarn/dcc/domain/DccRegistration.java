@@ -74,6 +74,9 @@ public class DccRegistration implements Serializable {
   @Column(name = "lab_id")
   private String labId;
 
+  @Column(name = "partner_id")
+  private String partnerId;
+
   @Column(name = "registration_token")
   private String registrationToken;
 

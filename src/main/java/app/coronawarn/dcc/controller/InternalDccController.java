@@ -43,9 +43,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -68,7 +68,9 @@ public class InternalDccController {
     description = "Endpoint to upload components to build the DCC.",
     tags = {"internal"},
     parameters = {
-      @Parameter(name = "testId", in = ParameterIn.PATH, description = "ID of the test (hashed GUID).")
+      @Parameter(name = "testId", in = ParameterIn.PATH, description = "ID of the test (hashed GUID)."),
+      @Parameter(name = "X-CWA-PARTNER-ID", in = ParameterIn.HEADER, description = "PartnerID. This needs only to be"
+        + " set if DCC-Server is contacted without DCC-Proxy in between.")
     },
     requestBody = @RequestBody(content = @Content(schema = @Schema(implementation = DccUploadRequest.class))),
     responses = {
@@ -78,26 +80,23 @@ public class InternalDccController {
         content = @Content(
           mediaType = MediaType.APPLICATION_JSON_VALUE,
           schema = @Schema(implementation = DccUploadResponse.class))),
-      @ApiResponse(
-        responseCode = "200",
-        description = "DCC updated",
-        content = @Content(
-          mediaType = MediaType.APPLICATION_JSON_VALUE,
-          schema = @Schema(implementation = DccUploadResponse.class))),
       @ApiResponse(responseCode = "400", description = "Invalid Data format"),
       @ApiResponse(responseCode = "404", description = "Test does not exists"),
+      @ApiResponse(responseCode = "409", description = "DCC already exists"),
       @ApiResponse(responseCode = "500", description = "Internal Server Error")
     })
   @PostMapping("/{testId}/dcc")
   public ResponseEntity<DccUploadResponse> uploadDcc(
     @Valid @Pattern(regexp = "^[XxA-Fa-f0-9]([A-Fa-f0-9]{63})$") @PathVariable("testId") String testId,
+    @Valid @Pattern(regexp = "^[A-Za-z0-9]{1,64}$") @RequestHeader("X-CWA-PARTNER-ID") String partnerId,
     @Valid @org.springframework.web.bind.annotation.RequestBody DccUploadRequest uploadRequest) {
 
     DccRegistration dccRegistration = dccRegistrationService.findByHashedGuid(testId).orElseThrow(
       () -> new DccServerException(HttpStatus.NOT_FOUND, "Test does not exists"));
 
-    // Check whether this DCC will be updated or newly created.
-    final boolean updated = dccRegistration.getDcc() != null;
+    if (dccRegistration.getDccHash() != null) {
+      throw new DccServerException(HttpStatus.CONFLICT, "DCC already exists");
+    }
 
     try {
       Base64.getDecoder().decode(uploadRequest.getDataEncryptionKey());
@@ -112,18 +111,24 @@ public class InternalDccController {
       dccRegistration,
       uploadRequest.getDccHash(),
       uploadRequest.getEncryptedDcc(),
-      uploadRequest.getDataEncryptionKey());
+      uploadRequest.getDataEncryptionKey(),
+      partnerId);
 
     try {
       dccRegistration = dccService.sign(dccRegistration);
     } catch (DccService.DccGenerateException e) {
+
+      // Delete DCC information if signing failed
+      dccRegistrationService.updateDccRegistration(
+        dccRegistration,
+        null,
+        null,
+        null,
+        partnerId);
+
       throw new DccServerException(HttpStatus.INTERNAL_SERVER_ERROR, e.getReason().toString());
     }
 
-    DccUploadResponse dccUploadResponse = new DccUploadResponse(dccRegistration.getDcc());
-
-    return ResponseEntity
-      .status(updated ? HttpStatus.OK : HttpStatus.CREATED)
-      .body(dccUploadResponse);
+    return ResponseEntity.ok(new DccUploadResponse(dccRegistration.getDcc()));
   }
 }

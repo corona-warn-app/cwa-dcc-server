@@ -114,14 +114,15 @@ public class DccRegistrationService {
    * @param dccHash      the hash of the plain data
    * @param encryptedDcc the DCC encrypted with
    * @param encryptedDek the encrypted Data Encryption Key.
-   * @return
+   * @param partnerId    the ID of the partner who has issued the DCC.
    */
   public DccRegistration updateDccRegistration(
-    DccRegistration registration, String dccHash, String encryptedDcc, String encryptedDek) {
+    DccRegistration registration, String dccHash, String encryptedDcc, String encryptedDek, String partnerId) {
 
     registration.setDccHash(dccHash);
     registration.setDccEncryptedPayload(encryptedDcc);
     registration.setEncryptedDataEncryptionKey(encryptedDek);
+    registration.setPartnerId(partnerId);
 
     return dccRegistrationRepository.save(registration);
   }
