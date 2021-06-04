@@ -21,6 +21,7 @@
 package app.coronawarn.dcc;
 
 import app.coronawarn.dcc.config.DccApplicationConfig;
+import net.javacrumbs.shedlock.spring.annotation.EnableSchedulerLock;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -35,6 +36,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 @SpringBootApplication
 @EnableWebSecurity
 @EnableScheduling
+@EnableSchedulerLock(defaultLockAtMostFor = "PT30S")
 @EnableConfigurationProperties({DccApplicationConfig.class})
 public class DccApplication {
 

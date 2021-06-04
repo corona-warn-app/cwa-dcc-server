@@ -21,12 +21,18 @@
 package app.coronawarn.dcc.repository;
 
 import app.coronawarn.dcc.domain.DccRegistration;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
+import javax.transaction.Transactional;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 @Repository
+@Transactional
 public interface DccRegistrationRepository extends JpaRepository<DccRegistration, Long> {
 
   Optional<DccRegistration> findByRegistrationToken(String registrationToken);
@@ -34,4 +40,19 @@ public interface DccRegistrationRepository extends JpaRepository<DccRegistration
   List<DccRegistration> findByLabId(String labId);
 
   Optional<DccRegistration> findByHashedGuid(String hashedGuid);
+
+  @Modifying(clearAutomatically = true, flushAutomatically = true)
+  @Query("DELETE FROM DccRegistration d WHERE d.updatedAt < :threshold")
+  int deleteEntityByUpdatedAtBefore(@Param("threshold") LocalDateTime threshold);
+
+  @Modifying(clearAutomatically = true, flushAutomatically = true)
+  @Query("UPDATE DccRegistration d SET d.dcc = NULL, d.publicKey = NULL, d.encryptedDataEncryptionKey = NULL,"
+    + " d.error = NULL, d.hashedGuid = NULL, d.dccEncryptedPayload = NULL"
+    + " WHERE d.updatedAt < :threshold AND d.dcc IS NOT NULL")
+  int removeDccDataByUpdatedAtBefore(@Param("threshold") LocalDateTime threshold);
+
+  @Modifying(clearAutomatically = true, flushAutomatically = true)
+  @Query("UPDATE DccRegistration d SET d.registrationToken = NULL"
+    + " WHERE d.createdAt < :threshold AND d.registrationToken IS NOT NULL")
+  int removeRegistrationTokenByCreatedAtBefore(@Param("threshold") LocalDateTime threshold);
 }
