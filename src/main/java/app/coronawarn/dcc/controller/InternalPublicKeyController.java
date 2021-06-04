@@ -72,7 +72,7 @@ public class InternalPublicKeyController {
   public ResponseEntity<List<LabPublicKeyInfo>> searchPublicKeys(
     @PathVariable("labId") String labId) {
 
-    List<LabPublicKeyInfo> resultList = dccRegistrationService.findByLabId(labId).stream()
+    List<LabPublicKeyInfo> resultList = dccRegistrationService.findPendingDccByLabId(labId).stream()
       .map(this::convert)
       .collect(Collectors.toList());
 
