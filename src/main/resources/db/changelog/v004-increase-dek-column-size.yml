@@ -1,0 +1,9 @@
+databaseChangeLog:
+  - changeSet:
+      id: increase-dek-column-size
+      author: f11h
+      changes:
+        - modifyDataType:
+            tableName: dcc_registration
+            columnName: encrypted_data_encryption_key
+            newDataType: varchar(600)

@@ -50,7 +50,7 @@ public class DccUploadRequest {
 
   @Schema(description = "Base64 encoded with PublicKey encrypted Data Encryption Key for encrypted DCC.")
   @Pattern(regexp = "^[A-Za-z0-9+/=]*$")
-  @Size(max = 255)
+  @Size(max = 600)
   @NotNull
   @NotEmpty
   private String dataEncryptionKey;

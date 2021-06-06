@@ -11,3 +11,6 @@ databaseChangeLog:
   - include:
       file: changelog/v003-add-partner-id-column.yml
       relativeToChangelogFile: true
+  - include:
+      file: changelog/v004-increase-dek-column-size.yml
+      relativeToChangelogFile: true
