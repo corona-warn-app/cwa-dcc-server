@@ -88,7 +88,7 @@ public class ExternalDccClaimController {
           schema = @Schema(implementation = DccUnexpectedError.class)))
     })
   @PostMapping("")
-  public ResponseEntity<DccDownloadResponse> claimDcc(
+  public ResponseEntity<?> claimDcc(
     @RequestHeader(value = "cwa-fake", required = false) String cwaFake,
     @org.springframework.web.bind.annotation.RequestBody RegistrationToken registrationToken) {
 
@@ -97,6 +97,12 @@ public class ExternalDccClaimController {
       dccRegistrationService.findByRegistrationToken(registrationToken.getRegistrationToken()).orElseThrow(
         () -> new DccServerException(HttpStatus.NOT_FOUND,
           "Registration Token does not exist/ is not registered at DCC-Server."));
+
+    if (dccRegistration.getError() == null) {
+      return ResponseEntity
+        .status(HttpStatus.INTERNAL_SERVER_ERROR)
+        .body(new DccUnexpectedError(dccRegistration.getError()));
+    }
 
     // DCC Pending
     if (dccRegistration.getDccHash() == null && dccRegistration.getDcc() == null) {

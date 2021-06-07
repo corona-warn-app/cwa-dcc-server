@@ -23,6 +23,7 @@ package app.coronawarn.dcc.controller;
 import app.coronawarn.dcc.domain.DccErrorReason;
 import app.coronawarn.dcc.domain.DccRegistration;
 import app.coronawarn.dcc.exception.DccServerException;
+import app.coronawarn.dcc.model.DccUnexpectedError;
 import app.coronawarn.dcc.model.DccUploadRequest;
 import app.coronawarn.dcc.model.DccUploadResponse;
 import app.coronawarn.dcc.service.DccRegistrationService;
@@ -86,7 +87,7 @@ public class InternalDccController {
       @ApiResponse(responseCode = "500", description = "Internal Server Error")
     })
   @PostMapping("/{testId}/dcc")
-  public ResponseEntity<DccUploadResponse> uploadDcc(
+  public ResponseEntity<?> uploadDcc(
     @Valid @Pattern(regexp = "^[XxA-Fa-f0-9]([A-Fa-f0-9]{63})$") @PathVariable("testId") String testId,
     @Valid @Pattern(regexp = "^[A-Za-z0-9]{1,64}$") @RequestHeader("X-CWA-PARTNER-ID") String partnerId,
     @Valid @org.springframework.web.bind.annotation.RequestBody DccUploadRequest uploadRequest) {
@@ -126,7 +127,9 @@ public class InternalDccController {
         null,
         partnerId);
 
-      throw new DccServerException(HttpStatus.INTERNAL_SERVER_ERROR, e.getReason().toString());
+      return ResponseEntity
+        .status(HttpStatus.INTERNAL_SERVER_ERROR)
+        .body(new DccUnexpectedError(dccRegistration.getError()));
     }
 
     return ResponseEntity.ok(new DccUploadResponse(dccRegistration.getDcc()));
