@@ -106,6 +106,8 @@ public class DccApplicationConfig {
     private ProxyConfig proxy = new ProxyConfig();
 
     private String apiKey;
+
+    boolean connectionCloseWorkaround;
   }
 
   @Getter
