@@ -58,7 +58,7 @@ public class LabIdClaim implements Serializable {
   private LocalDateTime createdAt;
 
   @Column(name = "last_used")
-  private LocalDateTime lastUsedt;
+  private LocalDateTime lastUsed;
 
   @Column(name = "lab_id")
   private String labId;
