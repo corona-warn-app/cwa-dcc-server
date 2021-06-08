@@ -45,6 +45,7 @@ cwa:
       trust-store-path: ${CWA_DCC_SIGNINGAPISERVER_TRUSTSTOREPATH}
       api-key: ${CWA_DCC_SIGNINGAPISERVER_APIKEY}
       verify-hostnames: true
+      connection-close-workaround: ${CWA_DCC_SIGNINGAPISERVER_CONNECTIONCLOSEWORKAROUND}
     request:
       sizelimit: 10000
     entities:

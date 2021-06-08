@@ -26,7 +26,8 @@ import feign.Client;
 import feign.httpclient.ApacheHttpClient;
 import java.io.IOException;
 import java.security.GeneralSecurityException;
-import java.util.Collections;
+import java.util.ArrayList;
+import java.util.List;
 import javax.net.ssl.HostnameVerifier;
 import javax.net.ssl.SSLContext;
 import lombok.RequiredArgsConstructor;
@@ -71,11 +72,19 @@ public class SigningApiClientConfig {
       ));
     }
 
+    List<BasicHeader> headers = new ArrayList<>();
+
     if (config.getSigningApiServer().getApiKey() != null) {
-      httpClientBuilder.setDefaultHeaders(Collections.singletonList(
-        new BasicHeader(HttpHeaders.AUTHORIZATION, "Bearer " + config.getSigningApiServer().getApiKey())
-      ));
+      headers.add(
+        new BasicHeader(HttpHeaders.AUTHORIZATION, "Bearer " + config.getSigningApiServer().getApiKey()));
     }
+
+    // This workaround is required because of misconfiguration on signing server.
+    if (config.getSigningApiServer().isConnectionCloseWorkaround()) {
+      headers.add(new BasicHeader(HttpHeaders.CONNECTION, "Close"));
+    }
+
+    httpClientBuilder.setDefaultHeaders(headers);
 
     return new ApacheHttpClient(httpClientBuilder.build());
   }
