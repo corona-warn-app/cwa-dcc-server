@@ -81,7 +81,7 @@ public class DccService {
     return registration;
   }
 
-  public byte[] callSigningApiWithRetry(String hashBase64) {
+  private byte[] callSigningApiWithRetry(String hashBase64) {
     try {
       return signingApiClient.sign(hashBase64);
     } catch (FeignException e) {
