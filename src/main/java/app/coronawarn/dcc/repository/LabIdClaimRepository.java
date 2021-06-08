@@ -14,7 +14,7 @@ public interface LabIdClaimRepository extends JpaRepository<LabIdClaim, Long> {
 
   int countByPartnerId(String partnerId);
 
-  Optional<LabIdClaim> findByPartnerIdAndLabId(String partnerId, String labId);
+  Optional<LabIdClaim> findByLabId(String labId);
 
   @Modifying
   @Query("UPDATE LabIdClaim l SET l.lastUsed = current_timestamp WHERE l = :claim")
@@ -22,6 +22,6 @@ public interface LabIdClaimRepository extends JpaRepository<LabIdClaim, Long> {
 
   @Modifying
   @Query("DELETE FROM LabIdClaim l WHERE l.lastUsed < :timestamp")
-  void deleteClaimsOlderThan(@Param("timestamp") LocalDateTime timestamp);
+  int deleteClaimsOlderThan(@Param("timestamp") LocalDateTime timestamp);
 
 }

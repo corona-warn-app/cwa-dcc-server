@@ -28,6 +28,7 @@ import app.coronawarn.dcc.model.DccUploadRequest;
 import app.coronawarn.dcc.model.DccUploadResponse;
 import app.coronawarn.dcc.service.DccRegistrationService;
 import app.coronawarn.dcc.service.DccService;
+import app.coronawarn.dcc.service.LabIdClaimService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.enums.ParameterIn;
@@ -61,6 +62,8 @@ public class InternalDccController {
 
   private final DccService dccService;
 
+  private final LabIdClaimService labIdClaimService;
+
   /**
    * Endpoint for inserting new DCC Registrations.
    */
@@ -82,6 +85,7 @@ public class InternalDccController {
           mediaType = MediaType.APPLICATION_JSON_VALUE,
           schema = @Schema(implementation = DccUploadResponse.class))),
       @ApiResponse(responseCode = "400", description = "Invalid Data format"),
+      @ApiResponse(responseCode = "403", description = "LabId is not or cannot be assigned to Partner."),
       @ApiResponse(responseCode = "404", description = "Test does not exists"),
       @ApiResponse(responseCode = "409", description = "DCC already exists"),
       @ApiResponse(responseCode = "500", description = "Internal Server Error")
@@ -94,6 +98,10 @@ public class InternalDccController {
 
     DccRegistration dccRegistration = dccRegistrationService.findByHashedGuid(testId).orElseThrow(
       () -> new DccServerException(HttpStatus.NOT_FOUND, "Test does not exists"));
+
+    if (!labIdClaimService.getClaim(partnerId, dccRegistration.getLabId())) {
+      throw new DccServerException(HttpStatus.FORBIDDEN, "Failed to claim LabId");
+    }
 
     if (dccRegistration.getDccHash() != null) {
       throw new DccServerException(HttpStatus.CONFLICT, "DCC already exists");

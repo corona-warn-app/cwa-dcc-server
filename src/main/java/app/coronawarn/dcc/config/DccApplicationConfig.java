@@ -44,6 +44,23 @@ public class DccApplicationConfig {
 
   private String dcciPrefix;
 
+  private LabIdClaim labIdClaim = new LabIdClaim();
+
+  @Getter
+  @Setter
+  public static class LabIdClaim {
+
+    /**
+     * Maximum age of a LabId Claim in days after last usage of the claimed LabId.
+     */
+    private int maximumAge = 30;
+
+    /**
+     * Maximum number of LabIds a partner is able to claim.
+     */
+    private int claimsPerPartner = 5;
+  }
+
   /**
    * Entity Cleanup configuration.
    */

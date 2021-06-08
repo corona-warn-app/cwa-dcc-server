@@ -69,6 +69,7 @@ public class LabIdClaim implements Serializable {
   @PrePersist
   public void prePersist() {
     createdAt = LocalDateTime.now();
+    lastUsed = LocalDateTime.now();
   }
 
 }
