@@ -98,7 +98,7 @@ public class ExternalDccClaimController {
         () -> new DccServerException(HttpStatus.NOT_FOUND,
           "Registration Token does not exist/ is not registered at DCC-Server."));
 
-    if (dccRegistration.getError() == null) {
+    if (dccRegistration.getError() != null) {
       return ResponseEntity
         .status(HttpStatus.INTERNAL_SERVER_ERROR)
         .body(new DccUnexpectedError(dccRegistration.getError()));
