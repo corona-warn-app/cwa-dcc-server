@@ -1,0 +1,55 @@
+databaseChangeLog:
+  - changeSet:
+      id: create-lab-id-claim-table
+      author: f11h
+      changes:
+        - createTable:
+            tableName: lab_id_claim
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  autoIncrement: true
+                  startWith: 1
+                  incrementBy: 1
+                  constraints:
+                    unique: true
+                    nullable: false
+                    primaryKey: true
+              - column:
+                  name: created_at
+                  type: datetime
+                  constraints:
+                    nullable: false
+              - column:
+                  name: last_used
+                  type: datetime
+                  constraints:
+                    nullable: false
+              - column:
+                  name: lab_id
+                  type: varchar(64)
+                  constraints:
+                    nullable: false
+                    unique: true
+              - column:
+                  name: partner_id
+                  type: varchar(64)
+                  constraints:
+                    nullable: false
+  - changeSet:
+      id: create-lab-id-claim-indexes
+      author: f11h
+      changes:
+        - createIndex:
+            tableName: lab_id_claim
+            indexName: idx_lab_id_claim_lab_id
+            columns:
+              - column:
+                  name: lab_id
+        - createIndex:
+            tableName: lab_id_claim
+            indexName: idx_lab_id_claim_partner_id
+            columns:
+              - column:
+                  name: partner_id
