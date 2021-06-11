@@ -58,7 +58,7 @@ public class DccService {
       byte[] hashBytes = Hex.decode(registration.getDccHash());
       String hashBase64 = Base64.getEncoder().encodeToString(hashBytes);
 
-      coseBytes = signingApiClient.sign(hashBase64);
+      coseBytes = callSigningApiWithRetry(hashBase64);
     } catch (FeignException e) {
       log.error("Failed to sign DCC. Http Status Code: {}, Message: {}", e.status(), e.getMessage());
 
@@ -73,8 +73,23 @@ public class DccService {
 
     dccRegistrationService.setDcc(registration, Base64.getEncoder().encodeToString(coseBytes));
 
+    // Reset Error if everything is ok and it previously exists
+    if (registration.getError() != null) {
+      dccRegistrationService.setError(registration, null);
+    }
+
     return registration;
   }
+
+  private byte[] callSigningApiWithRetry(String hashBase64) {
+    try {
+      return signingApiClient.sign(hashBase64);
+    } catch (FeignException e) {
+      log.info("First try of calling Signing API failed. Status Code: {}, Message: {}", e.status(), e.getMessage());
+      return signingApiClient.sign(hashBase64);
+    }
+  }
+
 
   /**
    * Parses a COSE SIGN1_MESSAGE and replaces the payload Binary-String with a new Payload.
