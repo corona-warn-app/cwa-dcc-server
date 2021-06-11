@@ -58,10 +58,11 @@ public class DccRegistrationService {
    *
    * @param registrationToken the registrationToken to use.
    * @param publicKey         the PublicKey to use.
+   * @return the created Registration Entity.
    * @throws DccRegistrationException if Creation went wrong.
-   * @return the created Registration Entity
    */
-  public DccRegistration createDccRegistration(String registrationToken, PublicKey publicKey) throws DccRegistrationException {
+  public DccRegistration createDccRegistration(String registrationToken, PublicKey publicKey)
+    throws DccRegistrationException {
     checkRegistrationTokenAlreadyExists(registrationToken);
     InternalTestResult testResult = checkRegistrationTokenIsValid(registrationToken);
 
