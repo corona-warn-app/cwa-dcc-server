@@ -36,6 +36,14 @@ public class LabIdClaimService {
   private final LabIdClaimRepository labIdClaimRepository;
 
   private final DccApplicationConfig config;
+
+  /**
+   * Checks if Claim already exists. If not creates a new one if quota is not already exceeded.
+   *
+   * @param partnerId the partner ID
+   * @param labId     the lab ID
+   * @return true if claiming was successful, false if not.
+   */
   public boolean getClaim(String partnerId, String labId) {
     log.debug("Trying to get claim for partnerId {} and labId {}", partnerId, labId);
 
