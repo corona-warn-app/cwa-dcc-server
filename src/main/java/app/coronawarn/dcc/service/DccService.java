@@ -71,7 +71,7 @@ public class DccService {
       }
     }
 
-    dccRegistrationService.setDcc(registration, Base64.getEncoder().encodeToString(coseBytes));
+    registration = dccRegistrationService.setDcc(registration, Base64.getEncoder().encodeToString(coseBytes));
 
     // Reset Error if everything is ok and it previously exists
     if (registration.getError() != null) {

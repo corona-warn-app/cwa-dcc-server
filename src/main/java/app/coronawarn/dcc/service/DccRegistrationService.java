@@ -59,8 +59,9 @@ public class DccRegistrationService {
    * @param registrationToken the registrationToken to use.
    * @param publicKey         the PublicKey to use.
    * @throws DccRegistrationException if Creation went wrong.
+   * @return the created Registration Entity
    */
-  public void createDccRegistration(String registrationToken, PublicKey publicKey) throws DccRegistrationException {
+  public DccRegistration createDccRegistration(String registrationToken, PublicKey publicKey) throws DccRegistrationException {
     checkRegistrationTokenAlreadyExists(registrationToken);
     InternalTestResult testResult = checkRegistrationTokenIsValid(registrationToken);
 
@@ -72,9 +73,11 @@ public class DccRegistrationService {
       .dcci(dcciGeneratorService.newDcci())
       .build();
 
-    dccRegistrationRepository.save(dccRegistration);
+    DccRegistration registration = dccRegistrationRepository.save(dccRegistration);
 
     log.info("Saved new DCC Registration for RegistrationToken {}", registrationToken);
+
+    return registration;
   }
 
   /**
@@ -132,10 +135,11 @@ public class DccRegistrationService {
    *
    * @param registration The target DCC Registration
    * @param reason       the new Error Reason
+   * @return the updated Registration Entity
    */
-  public void setError(DccRegistration registration, DccErrorReason reason) {
+  public DccRegistration setError(DccRegistration registration, DccErrorReason reason) {
     registration.setError(reason);
-    dccRegistrationRepository.save(registration);
+    return dccRegistrationRepository.save(registration);
   }
 
   /**
@@ -143,10 +147,11 @@ public class DccRegistrationService {
    *
    * @param registration The target DCC Registration
    * @param dcc          the base64 encoded DCC
+   * @return the updated Registration Entity
    */
-  public void setDcc(DccRegistration registration, String dcc) {
+  public DccRegistration setDcc(DccRegistration registration, String dcc) {
     registration.setDcc(dcc);
-    dccRegistrationRepository.save(registration);
+    return dccRegistrationRepository.save(registration);
   }
 
   private void checkRegistrationTokenAlreadyExists(String registrationToken) throws DccRegistrationException {
