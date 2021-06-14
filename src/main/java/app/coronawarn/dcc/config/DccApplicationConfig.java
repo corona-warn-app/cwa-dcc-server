@@ -58,7 +58,7 @@ public class DccApplicationConfig {
     /**
      * Maximum number of LabIds a partner is able to claim.
      */
-    private int claimsPerPartner = 5;
+    private int claimsPerPartner = 100;
   }
 
   /**
