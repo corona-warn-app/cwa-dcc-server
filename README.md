@@ -21,7 +21,7 @@
 The goal of this project is to develop the official Corona-Warn-App for Germany based on the exposure notification API from [Apple](https://www.apple.com/covid19/contacttracing/) and [Google](https://www.google.com/covid19/exposurenotifications/). The apps (for both iOS and Android) use Bluetooth technology to exchange anonymous encrypted data with other mobile phones (on which the app is also installed) in the vicinity of an app user's phone. The data is stored locally on each user's device, preventing authorities or other parties from accessing or controlling the data. This repository contains the **DCC Server** for the Corona-Warn-App.
 
 ## Status
-![ci](https://github.com/corona-warn-app/cwa-dcc-server/workflows/ci/badge.svg)
+[![ci](https://github.com/corona-warn-app/cwa-dcc-server/actions/workflows/ci-main.yml/badge.svg)](https://github.com/corona-warn-app/cwa-dcc-server/actions/workflows/ci-main.yml)
 [![quality gate](https://sonarcloud.io/api/project_badges/measure?project=corona-warn-app_cwa-dcc-server&metric=alert_status)](https://sonarcloud.io/dashboard?id=corona-warn-app_cwa-dcc-server)
 [![coverage](https://sonarcloud.io/api/project_badges/measure?project=corona-warn-app_cwa-dcc-server&metric=coverage)](https://sonarcloud.io/dashboard?id=corona-warn-app_cwa-dcc-server)
 [![bugs](https://sonarcloud.io/api/project_badges/measure?project=corona-warn-app_cwa-dcc-server&metric=bugs)](https://sonarcloud.io/dashboard?id=corona-warn-app_cwa-dcc-server)
