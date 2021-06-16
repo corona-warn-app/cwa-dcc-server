@@ -42,6 +42,8 @@ public class DccService {
 
   private final SigningApiClient signingApiClient;
 
+  private final HashingService hashingService;
+
   /**
    * Creates signed data for a DCCRegistration.
    * This Endpoints queries the SigningAPI and signs the hash assigned to this Registration.
@@ -58,7 +60,10 @@ public class DccService {
       byte[] hashBytes = Hex.decode(registration.getDccHash());
       String hashBase64 = Base64.getEncoder().encodeToString(hashBytes);
 
-      coseBytes = callSigningApiWithRetry(hashBase64);
+      coseBytes = callSigningApiWithRetry(
+        hashBase64,
+        hashingService.hash(registration.getLabId()),
+        hashingService.hash(registration.getDcci()));
     } catch (FeignException e) {
       log.error("Failed to sign DCC. Http Status Code: {}, Message: {}", e.status(), e.getMessage());
 
@@ -81,12 +86,12 @@ public class DccService {
     return registration;
   }
 
-  private byte[] callSigningApiWithRetry(String hashBase64) {
+  private byte[] callSigningApiWithRetry(String hashBase64, String hashedLabId, String hashedDcci) {
     try {
-      return signingApiClient.sign(hashBase64);
+      return signingApiClient.sign(hashBase64, hashedLabId, hashedDcci);
     } catch (FeignException e) {
       log.info("First try of calling Signing API failed. Status Code: {}, Message: {}", e.status(), e.getMessage());
-      return signingApiClient.sign(hashBase64);
+      return signingApiClient.sign(hashBase64, hashedLabId, hashedDcci);
     }
   }
 

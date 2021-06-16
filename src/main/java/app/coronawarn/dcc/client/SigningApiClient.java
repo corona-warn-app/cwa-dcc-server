@@ -24,6 +24,7 @@ import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 
 /**
  * This class represents the Verification Server Feign client.
@@ -44,5 +45,8 @@ public interface SigningApiClient {
     consumes = MediaType.TEXT_PLAIN_VALUE,
     produces = MediaType.APPLICATION_CBOR_VALUE
   )
-  byte[] sign(@RequestBody String hash);
+  byte[] sign(
+    @RequestBody String hash,
+    @RequestHeader("X-Location-Id") String labIdHash,
+    @RequestHeader("X-Transaction-Id") String dcciHash);
 }

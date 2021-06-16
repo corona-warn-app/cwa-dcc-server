@@ -30,6 +30,7 @@ import static app.coronawarn.dcc.utils.TestValues.partnerId;
 import static app.coronawarn.dcc.utils.TestValues.registrationToken;
 import static app.coronawarn.dcc.utils.TestValues.registrationTokenValue;
 import static app.coronawarn.dcc.utils.TestValues.testId;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.when;
@@ -65,6 +66,9 @@ public class DccServiceTest {
   @Autowired
   DccRegistrationRepository dccRegistrationRepository;
 
+  @Autowired
+  HashingService hashingService;
+
   @MockBean
   VerificationServerClient verificationServerClientMock;
 
@@ -80,7 +84,11 @@ public class DccServiceTest {
   void testSigning() throws NoSuchAlgorithmException, DccRegistrationService.DccRegistrationException {
 
     when(verificationServerClientMock.result(eq(registrationToken))).thenReturn(new InternalTestResult(6, labId, testId, 0));
-    when(signingApiClient.sign(eq(Base64.getEncoder().encodeToString(Hex.decode(dccHash))))).thenReturn(partialDcc);
+    when(signingApiClient.sign(
+      eq(Base64.getEncoder().encodeToString(Hex.decode(dccHash))),
+      eq(hashingService.hash(labId)),
+      anyString()
+    )).thenReturn(partialDcc);
 
     PublicKey publicKey = TestUtils.generateKeyPair().getPublic();
     DccRegistration registration = dccRegistrationService.createDccRegistration(registrationTokenValue, publicKey);
@@ -105,7 +113,10 @@ public class DccServiceTest {
     when(verificationServerClientMock.result(eq(registrationToken))).thenReturn(new InternalTestResult(6, labId, testId, 0));
 
     doThrow(new FeignException.BadRequest("", dummyRequest, null))
-      .when(signingApiClient).sign(eq(Base64.getEncoder().encodeToString(Hex.decode(dccHash))));
+      .when(signingApiClient).sign(
+      eq(Base64.getEncoder().encodeToString(Hex.decode(dccHash))),
+      eq(hashingService.hash(labId)),
+      anyString());
 
     PublicKey publicKey = TestUtils.generateKeyPair().getPublic();
     DccRegistration registration = dccRegistrationService.createDccRegistration(registrationTokenValue, publicKey);
@@ -131,7 +142,10 @@ public class DccServiceTest {
     when(verificationServerClientMock.result(eq(registrationToken))).thenReturn(new InternalTestResult(6, labId, testId, 0));
 
     doThrow(new FeignException.InternalServerError("", dummyRequest, null))
-      .when(signingApiClient).sign(eq(Base64.getEncoder().encodeToString(Hex.decode(dccHash))));
+      .when(signingApiClient).sign(
+      eq(Base64.getEncoder().encodeToString(Hex.decode(dccHash))),
+      eq(hashingService.hash((labId))),
+      anyString());
 
     PublicKey publicKey = TestUtils.generateKeyPair().getPublic();
     DccRegistration registration = dccRegistrationService.createDccRegistration(registrationTokenValue, publicKey);
@@ -158,7 +172,10 @@ public class DccServiceTest {
 
     doThrow(new FeignException.InternalServerError("", dummyRequest, null))
       .doReturn(partialDcc)
-      .when(signingApiClient).sign(eq(Base64.getEncoder().encodeToString(Hex.decode(dccHash))));
+      .when(signingApiClient).sign(
+      eq(Base64.getEncoder().encodeToString(Hex.decode(dccHash))),
+      eq(hashingService.hash(labId)),
+      anyString());
 
     PublicKey publicKey = TestUtils.generateKeyPair().getPublic();
     DccRegistration registration = dccRegistrationService.createDccRegistration(registrationTokenValue, publicKey);
@@ -185,7 +202,10 @@ public class DccServiceTest {
     doThrow(new FeignException.InternalServerError("", dummyRequest, null))
       .doThrow(new FeignException.InternalServerError("", dummyRequest, null))
       .doReturn(partialDcc)
-      .when(signingApiClient).sign(eq(Base64.getEncoder().encodeToString(Hex.decode(dccHash))));
+      .when(signingApiClient).sign(
+      eq(Base64.getEncoder().encodeToString(Hex.decode(dccHash))),
+      eq(hashingService.hash(labId)),
+      anyString());
 
     PublicKey publicKey = TestUtils.generateKeyPair().getPublic();
     DccRegistration registration = dccRegistrationService.createDccRegistration(registrationTokenValue, publicKey);
