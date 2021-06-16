@@ -76,14 +76,7 @@ public class DccService {
       }
     }
 
-    registration = dccRegistrationService.setDcc(registration, Base64.getEncoder().encodeToString(coseBytes));
-
-    // Reset Error if everything is ok and it previously exists
-    if (registration.getError() != null) {
-      dccRegistrationService.setError(registration, null);
-    }
-
-    return registration;
+    return dccRegistrationService.setDcc(registration, Base64.getEncoder().encodeToString(coseBytes));
   }
 
   private byte[] callSigningApiWithRetry(String hashBase64, String hashedLabId, String hashedDcci) {

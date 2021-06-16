@@ -224,6 +224,11 @@ public class DccServiceTest {
     Assertions.assertEquals(DccErrorReason.SIGNING_SERVER_ERROR, registrationWithFailedSigning.getError());
     Assertions.assertNull(registrationWithFailedSigning.getDcc());
 
+    registrationWithFailedSigning.setDccHash(dccHash);
+    registrationWithFailedSigning.setDccEncryptedPayload(Base64.getEncoder().encodeToString(encryptedDcc));
+    registrationWithFailedSigning.setEncryptedDataEncryptionKey(Base64.getEncoder().encodeToString(encryptedDek));
+    registrationWithFailedSigning.setPartnerId(partnerId);
+
     Assertions.assertDoesNotThrow(() -> dccService.sign(registrationWithFailedSigning));
 
     registration = dccRegistrationService.findByRegistrationToken(registrationTokenValue).orElseThrow();
