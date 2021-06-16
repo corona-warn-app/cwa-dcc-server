@@ -36,6 +36,7 @@ import java.security.spec.X509EncodedKeySpec;
 import java.util.Base64;
 import java.util.List;
 import java.util.Optional;
+import javax.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -133,24 +134,30 @@ public class DccRegistrationService {
 
   /**
    * Sets the Error Property on a DCC Registration and saves it into DB.
+   * This method also deletes previously saved DCC details from entity.
    *
    * @param registration The target DCC Registration
    * @param reason       the new Error Reason
    * @return the updated Registration Entity
    */
   public DccRegistration setError(DccRegistration registration, DccErrorReason reason) {
+    registration.setDcc(null);
+    registration.setDccHash(null);
+    registration.setPartnerId(null);
+    registration.setEncryptedDataEncryptionKey(null);
     registration.setError(reason);
     return dccRegistrationRepository.save(registration);
   }
 
   /**
-   * Sets the DCC Property on a DCC Registration and saves it into DB.
+   * Sets the DCC Property and resets error on a DCC Registration and saves it into DB.
    *
    * @param registration The target DCC Registration
    * @param dcc          the base64 encoded DCC
    * @return the updated Registration Entity
    */
-  public DccRegistration setDcc(DccRegistration registration, String dcc) {
+  public DccRegistration setDcc(DccRegistration registration, @NotNull String dcc) {
+    registration.setError(null);
     registration.setDcc(dcc);
     return dccRegistrationRepository.save(registration);
   }

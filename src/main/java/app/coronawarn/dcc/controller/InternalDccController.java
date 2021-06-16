@@ -116,12 +116,10 @@ public class InternalDccController {
       throw new DccServerException(HttpStatus.BAD_REQUEST, "Invalid Base64 in DEK or encrypted DCC.");
     }
 
-    dccRegistrationService.updateDccRegistration(
-      dccRegistration,
-      uploadRequest.getDccHash(),
-      uploadRequest.getEncryptedDcc(),
-      uploadRequest.getDataEncryptionKey(),
-      partnerId);
+    dccRegistration.setDccHash(uploadRequest.getDccHash());
+    dccRegistration.setDccEncryptedPayload(uploadRequest.getEncryptedDcc());
+    dccRegistration.setEncryptedDataEncryptionKey(uploadRequest.getDataEncryptionKey());
+    dccRegistration.setPartnerId(partnerId);
 
     try {
       dccRegistration = dccService.sign(dccRegistration);
@@ -139,6 +137,13 @@ public class InternalDccController {
         .status(HttpStatus.INTERNAL_SERVER_ERROR)
         .body(new DccUnexpectedError(dccRegistration.getError()));
     }
+
+    dccRegistrationService.updateDccRegistration(
+      dccRegistration,
+      uploadRequest.getDccHash(),
+      uploadRequest.getEncryptedDcc(),
+      uploadRequest.getDataEncryptionKey(),
+      partnerId);
 
     return ResponseEntity.ok(new DccUploadResponse(dccRegistration.getDcc()));
   }
