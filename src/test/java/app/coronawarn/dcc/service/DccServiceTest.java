@@ -80,7 +80,7 @@ public class DccServiceTest {
   void testSigning() throws NoSuchAlgorithmException, DccRegistrationService.DccRegistrationException {
 
     when(verificationServerClientMock.result(eq(registrationToken))).thenReturn(new InternalTestResult(6, labId, testId, 0));
-    when(signingApiClient.sign(eq(Base64.getEncoder().encodeToString(Hex.decode(dccHash))))).thenReturn(partialDcc);
+    when(signingApiClient.sign(eq(Base64.getEncoder().encodeToString(Hex.decode(dccHash))), eq(labId))).thenReturn(partialDcc);
 
     PublicKey publicKey = TestUtils.generateKeyPair().getPublic();
     DccRegistration registration = dccRegistrationService.createDccRegistration(registrationTokenValue, publicKey);
@@ -105,7 +105,7 @@ public class DccServiceTest {
     when(verificationServerClientMock.result(eq(registrationToken))).thenReturn(new InternalTestResult(6, labId, testId, 0));
 
     doThrow(new FeignException.BadRequest("", dummyRequest, null))
-      .when(signingApiClient).sign(eq(Base64.getEncoder().encodeToString(Hex.decode(dccHash))));
+      .when(signingApiClient).sign(eq(Base64.getEncoder().encodeToString(Hex.decode(dccHash))), eq(labId));
 
     PublicKey publicKey = TestUtils.generateKeyPair().getPublic();
     DccRegistration registration = dccRegistrationService.createDccRegistration(registrationTokenValue, publicKey);
@@ -131,7 +131,7 @@ public class DccServiceTest {
     when(verificationServerClientMock.result(eq(registrationToken))).thenReturn(new InternalTestResult(6, labId, testId, 0));
 
     doThrow(new FeignException.InternalServerError("", dummyRequest, null))
-      .when(signingApiClient).sign(eq(Base64.getEncoder().encodeToString(Hex.decode(dccHash))));
+      .when(signingApiClient).sign(eq(Base64.getEncoder().encodeToString(Hex.decode(dccHash))), eq(labId));
 
     PublicKey publicKey = TestUtils.generateKeyPair().getPublic();
     DccRegistration registration = dccRegistrationService.createDccRegistration(registrationTokenValue, publicKey);
@@ -158,7 +158,7 @@ public class DccServiceTest {
 
     doThrow(new FeignException.InternalServerError("", dummyRequest, null))
       .doReturn(partialDcc)
-      .when(signingApiClient).sign(eq(Base64.getEncoder().encodeToString(Hex.decode(dccHash))));
+      .when(signingApiClient).sign(eq(Base64.getEncoder().encodeToString(Hex.decode(dccHash))), eq(labId));
 
     PublicKey publicKey = TestUtils.generateKeyPair().getPublic();
     DccRegistration registration = dccRegistrationService.createDccRegistration(registrationTokenValue, publicKey);
@@ -185,7 +185,7 @@ public class DccServiceTest {
     doThrow(new FeignException.InternalServerError("", dummyRequest, null))
       .doThrow(new FeignException.InternalServerError("", dummyRequest, null))
       .doReturn(partialDcc)
-      .when(signingApiClient).sign(eq(Base64.getEncoder().encodeToString(Hex.decode(dccHash))));
+      .when(signingApiClient).sign(eq(Base64.getEncoder().encodeToString(Hex.decode(dccHash))), eq(labId));
 
     PublicKey publicKey = TestUtils.generateKeyPair().getPublic();
     DccRegistration registration = dccRegistrationService.createDccRegistration(registrationTokenValue, publicKey);

@@ -103,7 +103,7 @@ public class InternalDccControllerTest {
     when(verificationServerClientMock.result(eq(registrationToken)))
       .thenReturn(new InternalTestResult(6, labId, testId, 0));
 
-    when(signingApiClientMock.sign(eq(dccHashBase64)))
+    when(signingApiClientMock.sign(eq(dccHashBase64), eq(labId)))
       .thenReturn(partialDcc);
   }
 
@@ -123,7 +123,7 @@ public class InternalDccControllerTest {
       .andExpect(status().isOk())
       .andExpect(jsonPath("$.partialDcc").value(equalTo(partialDccBase64)));
 
-    verify(signingApiClientMock).sign(eq(dccHashBase64));
+    verify(signingApiClientMock).sign(eq(dccHashBase64), eq(labId));
 
     Optional<DccRegistration> dccRegistration = dccRegistrationRepository.findByRegistrationToken(registrationTokenValue);
 
@@ -147,7 +147,7 @@ public class InternalDccControllerTest {
     )
       .andExpect(status().isNotFound());
 
-    verify(signingApiClientMock, never()).sign(eq(dccHashBase64));
+    verify(signingApiClientMock, never()).sign(eq(dccHashBase64), eq(labId));
   }
 
   @Test
@@ -166,7 +166,7 @@ public class InternalDccControllerTest {
     )
       .andExpect(status().isForbidden());
 
-    verify(signingApiClientMock, never()).sign(eq(dccHashBase64));
+    verify(signingApiClientMock, never()).sign(eq(dccHashBase64), eq(labId));
   }
 
   @Test
@@ -186,7 +186,7 @@ public class InternalDccControllerTest {
     )
       .andExpect(status().isConflict());
 
-    verify(signingApiClientMock, never()).sign(eq(dccHashBase64));
+    verify(signingApiClientMock, never()).sign(eq(dccHashBase64), eq(labId));
   }
 
   @Test
@@ -202,7 +202,7 @@ public class InternalDccControllerTest {
     )
       .andExpect(status().isBadRequest());
 
-    verify(signingApiClientMock, never()).sign(eq(dccHashBase64));
+    verify(signingApiClientMock, never()).sign(eq(dccHashBase64), eq(labId));
   }
 
   @Test
@@ -218,7 +218,7 @@ public class InternalDccControllerTest {
     )
       .andExpect(status().isBadRequest());
 
-    verify(signingApiClientMock, never()).sign(eq(dccHashBase64));
+    verify(signingApiClientMock, never()).sign(eq(dccHashBase64), eq(labId));
   }
 
   @Test
@@ -228,7 +228,7 @@ public class InternalDccControllerTest {
     DccUploadRequest dccUploadRequest = new DccUploadRequest(dccHash, encryptedDccBase64, encryptedDekBase64);
 
     doThrow(new FeignException.BadRequest("", dummyRequest, null))
-      .when(signingApiClientMock).sign(eq(dccHashBase64));
+      .when(signingApiClientMock).sign(eq(dccHashBase64), eq(labId));
 
     mockMvc.perform(post("/version/v1/test/" + testId + "/dcc")
       .contentType(MediaType.APPLICATION_JSON_VALUE)
@@ -254,7 +254,7 @@ public class InternalDccControllerTest {
     DccUploadRequest dccUploadRequest = new DccUploadRequest(dccHash, encryptedDccBase64, encryptedDekBase64);
 
     doThrow(new FeignException.InternalServerError("", dummyRequest, null))
-      .when(signingApiClientMock).sign(eq(dccHashBase64));
+      .when(signingApiClientMock).sign(eq(dccHashBase64), eq(labId));
 
     mockMvc.perform(post("/version/v1/test/" + testId + "/dcc")
       .contentType(MediaType.APPLICATION_JSON_VALUE)

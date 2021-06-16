@@ -74,7 +74,7 @@ public class SigningApiClientConfig {
 
     List<BasicHeader> headers = new ArrayList<>();
 
-    if (config.getSigningApiServer().getApiKey() != null) {
+    if (!config.getSigningApiServer().getApiKey().isEmpty()) {
       headers.add(
         new BasicHeader(HttpHeaders.AUTHORIZATION, "Bearer " + config.getSigningApiServer().getApiKey()));
     }
