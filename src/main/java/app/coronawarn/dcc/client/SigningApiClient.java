@@ -45,5 +45,8 @@ public interface SigningApiClient {
     consumes = MediaType.TEXT_PLAIN_VALUE,
     produces = MediaType.APPLICATION_CBOR_VALUE
   )
-  byte[] sign(@RequestBody String hash, @RequestHeader("<<LAB ID REQUEST HEADER>>") String labId);
+  byte[] sign(
+    @RequestBody String hash,
+    @RequestHeader("X-Location-Id") String labIdHash,
+    @RequestHeader("X-Transaction-Id") String dcciHash);
 }
