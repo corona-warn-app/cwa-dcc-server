@@ -24,7 +24,7 @@ server:
       TLS_AES_128_CCM_SHA256
     key-store: ${SERVER_SSL_KEYSTORE}
     key-store-password: ${SERVER_SSL_KEYSTOREPASSWORD}
-    trust-store:  ${SERVER_SSL_TRUSTSTORE}
+    trust-store: ${SERVER_SSL_TRUSTSTORE}
     trust-store-password: ${SERVER_SSL_TRUSTSTOREPASSWORD}
 cwa:
   dcc:
@@ -48,7 +48,11 @@ cwa:
       connection-close-workaround: ${CWA_DCC_SIGNINGAPISERVER_CONNECTIONCLOSEWORKAROUND:false}
     request:
       sizelimit: 10000
-    entities:
-      cleanup:
-        days: 21
-        rate: 1800000
+    cleanup:
+      entity: ${CWA_DCC_CLEANUP_ENTITY:180}
+      rate: ${CWA_DCC_CLEANUP_RATE:60000}
+      registration-token: ${CWA_DCC_CLEANUP_REGISTRATIONTOKEN:21}
+      dcc-data: ${CWA_DCC_CLEANUP_DCCDATA:4}
+    lab-id-claim:
+      claims-per-partner: ${CWA_DCC_LABIDCLAIM_CLAIMSPERPARTNER:10000}
+      maximum-age: ${CWA_DCC_LABIDCLAIM_MAXIMUMAGE:30}
