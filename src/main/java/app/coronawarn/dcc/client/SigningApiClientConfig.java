@@ -84,6 +84,8 @@ public class SigningApiClientConfig {
       headers.add(new BasicHeader(HttpHeaders.CONNECTION, "Close"));
     }
 
+    headers.add(new BasicHeader("X-UBIRCH-DCCType", "T"));
+
     httpClientBuilder.setDefaultHeaders(headers);
 
     return new ApacheHttpClient(httpClientBuilder.build());
