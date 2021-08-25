@@ -1,0 +1,8 @@
+databaseChangeLog:
+  - changeSet:
+      id: add-unique-to-hashed-guid
+      author: mschulte-tsi
+      changes:
+        - addUniqueConstraint:
+            columnNames: hashed_guid
+            tableName: dcc_registration
