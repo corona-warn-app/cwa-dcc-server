@@ -178,8 +178,8 @@ public class DccRegistrationServiceTest {
     String registrationToken4 = "2".repeat(36);
 
     String testId2 = "0".repeat(64);
-    String testId3 = "0".repeat(64);
-    String testId4 = "0".repeat(64);
+    String testId3 = "1".repeat(64);
+    String testId4 = "3".repeat(64);
 
     when(verificationServerClientMock.result(eq(registrationToken))).thenReturn(new InternalTestResult(6, labId, testId, 0));
     when(verificationServerClientMock.result(eq(new RegistrationToken(registrationToken2)))).thenReturn(new InternalTestResult(6, labId, testId2, 0));

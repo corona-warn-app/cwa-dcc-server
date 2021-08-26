@@ -17,3 +17,6 @@ databaseChangeLog:
   - include:
       file: changelog/v005-create-lab-id-claim-table.yml
       relativeToChangelogFile: true
+  - include:
+      file: changelog/v006-add-unique-to-hashed-guid.yml
+      relativeToChangelogFile: true
