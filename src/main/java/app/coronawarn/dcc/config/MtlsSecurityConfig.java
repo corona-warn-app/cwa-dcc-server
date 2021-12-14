@@ -29,6 +29,7 @@ import java.util.Collections;
 import java.util.stream.Stream;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.codec.digest.DigestUtils;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -95,16 +96,13 @@ public class MtlsSecurityConfig extends WebSecurityConfigurerAdapter {
 
   private static class ThumbprintX509PrincipalExtractor implements X509PrincipalExtractor {
 
-    MessageDigest messageDigest;
-
-    private ThumbprintX509PrincipalExtractor() throws NoSuchAlgorithmException {
-      messageDigest = MessageDigest.getInstance("SHA-256");
-    }
-
     @Override
     public Object extractPrincipal(X509Certificate x509Certificate) {
+
       try {
-        return String.valueOf(Hex.encode(messageDigest.digest(x509Certificate.getEncoded())));
+        String hash = DigestUtils.sha256Hex(x509Certificate.getEncoded());
+        log.debug("Accessed by Subject {} Hash {}",x509Certificate.getSubjectDN().getName(), hash);
+        return hash;
       } catch (CertificateEncodingException e) {
         log.error("Failed to extract bytes from certificate");
         return null;
