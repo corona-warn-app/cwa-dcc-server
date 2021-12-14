@@ -38,6 +38,7 @@ public class DccApplicationConfig {
 
   private Cleanup cleanup = new Cleanup();
   private Request request = new Request();
+  private String allowedClientCertificates;
 
   private MtlsConfiguration verificationServer = new MtlsConfiguration();
   private MtlsConfiguration signingApiServer = new MtlsConfiguration();
@@ -125,6 +126,7 @@ public class DccApplicationConfig {
     private String apiKey;
 
     boolean connectionCloseWorkaround;
+
   }
 
   @Getter

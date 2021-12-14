@@ -79,3 +79,4 @@ springdoc:
     enabled: true
   swagger-ui:
     path: /api/swagger
+allowed-client-certificates:

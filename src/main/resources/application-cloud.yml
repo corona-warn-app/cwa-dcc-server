@@ -56,3 +56,4 @@ cwa:
     lab-id-claim:
       claims-per-partner: ${CWA_DCC_LABIDCLAIM_CLAIMSPERPARTNER:10000}
       maximum-age: ${CWA_DCC_LABIDCLAIM_MAXIMUMAGE:30}
+allowed-client-certificates: ${DCC_ALLOWEDCLIENTCERTIFICATES}
