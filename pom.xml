@@ -59,7 +59,6 @@
       **/config/*,
       **/exception/*
     </sonar.coverage.exclusions>
-    <log4j2.version>2.16.0</log4j2.version>
   </properties>
 
   <dependencyManagement>
@@ -240,6 +239,12 @@
       <groupId>net.javacrumbs.shedlock</groupId>
       <artifactId>shedlock-spring</artifactId>
       <version>${shedlock.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.logging.log4j</groupId>
+      <artifactId>log4j-bom</artifactId>
+      <version>2.16.0</version>
+      <scope>import</scope>
     </dependency>
   </dependencies>
 
