@@ -136,7 +136,7 @@ public class ExternalPublicKeyControllerTest {
 
     reset(verificationServerClientMock);
 
-    doThrow(new FeignException.Forbidden("", dummyRequest, null))
+    doThrow(new FeignException.Forbidden("", dummyRequest, null, null))
       .when(verificationServerClientMock).result(eq(registrationToken));
 
     mockMvc.perform(post("/version/v1/publicKey")
@@ -157,7 +157,7 @@ public class ExternalPublicKeyControllerTest {
 
     reset(verificationServerClientMock);
 
-    doThrow(new FeignException.NotFound("", dummyRequest, null))
+    doThrow(new FeignException.NotFound("", dummyRequest, null, null))
       .when(verificationServerClientMock).result(eq(registrationToken));
 
     mockMvc.perform(post("/version/v1/publicKey")
@@ -178,7 +178,7 @@ public class ExternalPublicKeyControllerTest {
 
     reset(verificationServerClientMock);
 
-    doThrow(new FeignException.InternalServerError("", dummyRequest, null))
+    doThrow(new FeignException.InternalServerError("", dummyRequest, null, null))
       .when(verificationServerClientMock).result(eq(registrationToken));
 
     mockMvc.perform(post("/version/v1/publicKey")

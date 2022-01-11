@@ -232,7 +232,7 @@ public class InternalDccControllerTest {
     dccRegistrationService.createDccRegistration(registrationTokenValue, keyPair.getPublic());
     DccUploadRequest dccUploadRequest = new DccUploadRequest(dccHash, encryptedDccBase64, encryptedDekBase64);
 
-    doThrow(new FeignException.BadRequest("", dummyRequest, null))
+    doThrow(new FeignException.BadRequest("", dummyRequest, null, null))
       .when(signingApiClientMock).sign(eq(dccHashBase64), eq(hashingService.hash(labId)), anyString());
 
     mockMvc.perform(post("/version/v1/test/" + testId + "/dcc")
@@ -258,7 +258,7 @@ public class InternalDccControllerTest {
     dccRegistrationService.createDccRegistration(registrationTokenValue, keyPair.getPublic());
     DccUploadRequest dccUploadRequest = new DccUploadRequest(dccHash, encryptedDccBase64, encryptedDekBase64);
 
-    doThrow(new FeignException.InternalServerError("", dummyRequest, null))
+    doThrow(new FeignException.InternalServerError("", dummyRequest, null, null))
       .when(signingApiClientMock).sign(eq(dccHashBase64), eq(hashingService.hash(labId)), anyString());
 
     mockMvc.perform(post("/version/v1/test/" + testId + "/dcc")

@@ -101,7 +101,7 @@ public class DccRegistrationServiceTest {
 
   @Test
   void testCreateRegistrationRegTokenNotFound() throws NoSuchAlgorithmException {
-    doThrow(new FeignException.NotFound("", dummyRequest, null))
+    doThrow(new FeignException.NotFound("", dummyRequest, null, null))
       .when(verificationServerClientMock).result(eq(registrationToken));
 
     PublicKey publicKey = TestUtils.generateKeyPair().getPublic();
@@ -115,7 +115,7 @@ public class DccRegistrationServiceTest {
 
   @Test
   void testCreateRegistrationRegTokenForbidden() throws NoSuchAlgorithmException {
-    doThrow(new FeignException.Forbidden("", dummyRequest, null))
+    doThrow(new FeignException.Forbidden("", dummyRequest, null, null))
       .when(verificationServerClientMock).result(eq(registrationToken));
 
     PublicKey publicKey = TestUtils.generateKeyPair().getPublic();
@@ -129,7 +129,7 @@ public class DccRegistrationServiceTest {
 
   @Test
   void testCreateRegistrationVerificationServerError() throws NoSuchAlgorithmException {
-    doThrow(new FeignException.InternalServerError("", dummyRequest, null))
+    doThrow(new FeignException.InternalServerError("", dummyRequest, null, null))
       .when(verificationServerClientMock).result(eq(registrationToken));
 
     PublicKey publicKey = TestUtils.generateKeyPair().getPublic();
