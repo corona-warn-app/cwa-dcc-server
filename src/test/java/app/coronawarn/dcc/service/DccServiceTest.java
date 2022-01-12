@@ -112,7 +112,7 @@ public class DccServiceTest {
 
     when(verificationServerClientMock.result(eq(registrationToken))).thenReturn(new InternalTestResult(6, labId, testId, 0));
 
-    doThrow(new FeignException.BadRequest("", dummyRequest, null))
+    doThrow(new FeignException.BadRequest("", dummyRequest, null, null))
       .when(signingApiClient).sign(
       eq(Base64.getEncoder().encodeToString(Hex.decode(dccHash))),
       eq(hashingService.hash(labId)),
@@ -141,7 +141,7 @@ public class DccServiceTest {
 
     when(verificationServerClientMock.result(eq(registrationToken))).thenReturn(new InternalTestResult(6, labId, testId, 0));
 
-    doThrow(new FeignException.InternalServerError("", dummyRequest, null))
+    doThrow(new FeignException.InternalServerError("", dummyRequest, null, null))
       .when(signingApiClient).sign(
       eq(Base64.getEncoder().encodeToString(Hex.decode(dccHash))),
       eq(hashingService.hash((labId))),
@@ -170,7 +170,7 @@ public class DccServiceTest {
 
     when(verificationServerClientMock.result(eq(registrationToken))).thenReturn(new InternalTestResult(6, labId, testId, 0));
 
-    doThrow(new FeignException.InternalServerError("", dummyRequest, null))
+    doThrow(new FeignException.InternalServerError("", dummyRequest, null, null))
       .doReturn(partialDcc)
       .when(signingApiClient).sign(
       eq(Base64.getEncoder().encodeToString(Hex.decode(dccHash))),
@@ -199,8 +199,8 @@ public class DccServiceTest {
 
     when(verificationServerClientMock.result(eq(registrationToken))).thenReturn(new InternalTestResult(6, labId, testId, 0));
 
-    doThrow(new FeignException.InternalServerError("", dummyRequest, null))
-      .doThrow(new FeignException.InternalServerError("", dummyRequest, null))
+    doThrow(new FeignException.InternalServerError("", dummyRequest, null, null))
+      .doThrow(new FeignException.InternalServerError("", dummyRequest, null, null))
       .doReturn(partialDcc)
       .when(signingApiClient).sign(
       eq(Base64.getEncoder().encodeToString(Hex.decode(dccHash))),

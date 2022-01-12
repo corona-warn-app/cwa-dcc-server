@@ -25,13 +25,12 @@ import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import liquibase.util.StringUtils;
-import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 /**
@@ -42,7 +41,6 @@ import org.springframework.web.filter.OncePerRequestFilter;
 @RequiredArgsConstructor
 public class RequestSizeLimitFilter extends OncePerRequestFilter {
 
-  @NonNull
   private final DccApplicationConfig dccApplicationConfig;
 
   @Override
@@ -61,7 +59,7 @@ public class RequestSizeLimitFilter extends OncePerRequestFilter {
   private boolean isChunkedRequest(HttpServletRequest request) {
     String header = request.getHeader(HttpHeaders.TRANSFER_ENCODING);
 
-    return !StringUtils.isEmpty(header) && header.equalsIgnoreCase("chunked");
+    return StringUtils.hasText(header) && header.equalsIgnoreCase("chunked");
   }
 
 }

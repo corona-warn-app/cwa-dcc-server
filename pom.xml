@@ -34,21 +34,22 @@
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     <!-- dependencies -->
-    <spring.boot.version>2.5.7</spring.boot.version>
-    <spring-security.version>5.3.10.RELEASE</spring-security.version>
-    <spring.cloud.version>2020.0.4</spring.cloud.version>
-    <lombok.version>1.18.16</lombok.version>
-    <liquibase.version>3.10.0</liquibase.version>
-    <springdoc.version>1.4.5</springdoc.version>
-    <cbor.version>4.4.3</cbor.version>
-    <hibernate-validator.version>6.1.5.Final</hibernate-validator.version>
-    <shedlock.version>4.20.0</shedlock.version>
+    <spring.boot.version>2.6.2</spring.boot.version>
+    <spring-security.version>5.6.1</spring-security.version>
+    <spring.cloud.version>2021.0.0</spring.cloud.version>
+    <lombok.version>1.18.22</lombok.version>
+    <liquibase.version>4.6.2</liquibase.version>
+    <springdoc.version>1.6.4</springdoc.version>
+    <cbor.version>4.5</cbor.version>
+    <hibernate-validator.version>7.0.2.Final</hibernate-validator.version>
+    <shedlock.version>4.30.0</shedlock.version>
     <!-- plugins -->
-    <plugin.checkstyle.version>3.1.1</plugin.checkstyle.version>
-    <plugin.sonar.version>3.6.1.1688</plugin.sonar.version>
-    <plugin.jacoco.version>0.8.5</plugin.jacoco.version>
+    <plugin.checkstyle.version>3.1.2</plugin.checkstyle.version>
+    <plugin.checkstyle.puppycrawl.version>9.2.1</plugin.checkstyle.puppycrawl.version>
+    <plugin.sonar.version>3.9.1.2184</plugin.sonar.version>
+    <plugin.jacoco.version>0.8.7</plugin.jacoco.version>
     <plugin.surefire.version>2.22.2</plugin.surefire.version>
-    <guava.version>30.0-jre</guava.version>
+    <guava.version>31.0.1-jre</guava.version>
     <license.projectName>Corona-Warn-App / cwa-dcc</license.projectName>
     <license.inceptionYear>2020</license.inceptionYear>
     <license.licenseName>apache_v2</license.licenseName>
@@ -240,18 +241,6 @@
       <artifactId>shedlock-spring</artifactId>
       <version>${shedlock.version}</version>
     </dependency>
-    <dependency>
-      <groupId>org.apache.logging.log4j</groupId>
-      <artifactId>log4j-api</artifactId>
-      <version>2.17.0</version>
-      <scope>compile</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.apache.logging.log4j</groupId>
-        <artifactId>log4j-to-slf4j</artifactId>
-        <version>2.17.0</version>
-        <scope>compile</scope>
-    </dependency>
   </dependencies>
 
   <build>
@@ -266,6 +255,13 @@
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-checkstyle-plugin</artifactId>
           <version>${plugin.checkstyle.version}</version>
+          <dependencies>
+            <dependency>
+              <groupId>com.puppycrawl.tools</groupId>
+              <artifactId>checkstyle</artifactId>
+              <version>${plugin.checkstyle.puppycrawl.version}</version>
+            </dependency>
+          </dependencies>
         </plugin>
         <plugin>
           <groupId>org.sonarsource.scanner.maven</groupId>
