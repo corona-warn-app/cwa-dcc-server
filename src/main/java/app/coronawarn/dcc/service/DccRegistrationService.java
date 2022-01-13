@@ -89,7 +89,7 @@ public class DccRegistrationService {
    * @return List of matching DCC Registrations.
    */
   public List<DccRegistration> findPendingDccByLabId(String labId) {
-    return dccRegistrationRepository.findByLabIdAndDccHashIsNull(labId);
+    return dccRegistrationRepository.findByLabIdAndDccHashIsNullAndPublicKeyIsNotNull(labId);
   }
 
   /**
