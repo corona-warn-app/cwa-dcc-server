@@ -194,6 +194,10 @@ public class DccRegistrationService {
       throw new DccRegistrationException(DccRegistrationException.Reason.INVALID_REGISTRATION_TOKEN_FORBIDDEN);
     }
 
+    if (testResult.getLabId() == null) {
+      throw new DccRegistrationException(DccRegistrationException.Reason.NO_LAB_ID);
+    }
+
     return testResult;
   }
 
@@ -247,7 +251,8 @@ public class DccRegistrationService {
       REGISTRATION_TOKEN_ALREADY_EXISTS,
       INVALID_REGISTRATION_TOKEN_NOT_FOUND,
       INVALID_REGISTRATION_TOKEN_FORBIDDEN,
-      VERIFICATION_SERVER_ERROR
+      VERIFICATION_SERVER_ERROR,
+      NO_LAB_ID
     }
   }
 

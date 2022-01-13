@@ -27,7 +27,6 @@ import static app.coronawarn.dcc.utils.TestValues.registrationToken;
 import static app.coronawarn.dcc.utils.TestValues.registrationTokenValue;
 import static app.coronawarn.dcc.utils.TestValues.testId;
 import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.reset;
 import static org.mockito.Mockito.when;
@@ -100,9 +99,9 @@ public class ExternalPublicKeyControllerTest {
       registrationTokenValue, publicKeyBase64, "");
 
     mockMvc.perform(post("/version/v1/publicKey")
-      .contentType(MediaType.APPLICATION_JSON_VALUE)
-      .content(new ObjectMapper().writeValueAsString(uploadPublicKeyRequest))
-    )
+        .contentType(MediaType.APPLICATION_JSON_VALUE)
+        .content(new ObjectMapper().writeValueAsString(uploadPublicKeyRequest))
+      )
       .andExpect(status().isCreated());
 
 
@@ -120,9 +119,9 @@ public class ExternalPublicKeyControllerTest {
       registrationTokenValue, publicKeyBase64, "");
 
     mockMvc.perform(post("/version/v1/publicKey")
-      .contentType(MediaType.APPLICATION_JSON_VALUE)
-      .content(new ObjectMapper().writeValueAsString(uploadPublicKeyRequest))
-    )
+        .contentType(MediaType.APPLICATION_JSON_VALUE)
+        .content(new ObjectMapper().writeValueAsString(uploadPublicKeyRequest))
+      )
       .andExpect(status().isBadRequest());
   }
 
@@ -140,12 +139,31 @@ public class ExternalPublicKeyControllerTest {
       .when(verificationServerClientMock).result(eq(registrationToken));
 
     mockMvc.perform(post("/version/v1/publicKey")
-      .contentType(MediaType.APPLICATION_JSON_VALUE)
-      .content(new ObjectMapper().writeValueAsString(uploadPublicKeyRequest))
-    )
+        .contentType(MediaType.APPLICATION_JSON_VALUE)
+        .content(new ObjectMapper().writeValueAsString(uploadPublicKeyRequest))
+      )
       .andExpect(status().isForbidden());
   }
 
+  @Test
+  void testUploadPublicKeyInvalidRegistrationTokenNoLabId() throws Exception {
+    KeyPair keyPair = TestUtils.generateKeyPair();
+    String publicKeyBase64 = Base64.getEncoder().encodeToString(keyPair.getPublic().getEncoded());
+
+    UploadPublicKeyRequest uploadPublicKeyRequest = new UploadPublicKeyRequest(
+      registrationTokenValue, publicKeyBase64, "");
+
+    reset(verificationServerClientMock);
+
+    when(verificationServerClientMock.result(eq(registrationToken)))
+      .thenReturn(new InternalTestResult(6, null, testId, 0));
+
+    mockMvc.perform(post("/version/v1/publicKey")
+        .contentType(MediaType.APPLICATION_JSON_VALUE)
+        .content(new ObjectMapper().writeValueAsString(uploadPublicKeyRequest))
+      )
+      .andExpect(status().isForbidden());
+  }
 
   @Test
   void testUploadPublicKeyInvalidRegistrationTokenNotFound() throws Exception {
@@ -161,9 +179,9 @@ public class ExternalPublicKeyControllerTest {
       .when(verificationServerClientMock).result(eq(registrationToken));
 
     mockMvc.perform(post("/version/v1/publicKey")
-      .contentType(MediaType.APPLICATION_JSON_VALUE)
-      .content(new ObjectMapper().writeValueAsString(uploadPublicKeyRequest))
-    )
+        .contentType(MediaType.APPLICATION_JSON_VALUE)
+        .content(new ObjectMapper().writeValueAsString(uploadPublicKeyRequest))
+      )
       .andExpect(status().isNotFound());
   }
 
@@ -182,9 +200,9 @@ public class ExternalPublicKeyControllerTest {
       .when(verificationServerClientMock).result(eq(registrationToken));
 
     mockMvc.perform(post("/version/v1/publicKey")
-      .contentType(MediaType.APPLICATION_JSON_VALUE)
-      .content(new ObjectMapper().writeValueAsString(uploadPublicKeyRequest))
-    )
+        .contentType(MediaType.APPLICATION_JSON_VALUE)
+        .content(new ObjectMapper().writeValueAsString(uploadPublicKeyRequest))
+      )
       .andExpect(status().isInternalServerError());
   }
 
@@ -199,9 +217,9 @@ public class ExternalPublicKeyControllerTest {
       registrationTokenValue, publicKeyBase64, "");
 
     mockMvc.perform(post("/version/v1/publicKey")
-      .contentType(MediaType.APPLICATION_JSON_VALUE)
-      .content(new ObjectMapper().writeValueAsString(uploadPublicKeyRequest))
-    )
+        .contentType(MediaType.APPLICATION_JSON_VALUE)
+        .content(new ObjectMapper().writeValueAsString(uploadPublicKeyRequest))
+      )
       .andExpect(status().isConflict());
   }
 
@@ -219,9 +237,9 @@ public class ExternalPublicKeyControllerTest {
       .thenReturn(new InternalTestResult(0, labId, testId, 0));
 
     mockMvc.perform(post("/version/v1/publicKey")
-      .contentType(MediaType.APPLICATION_JSON_VALUE)
-      .content(new ObjectMapper().writeValueAsString(uploadPublicKeyRequest))
-    )
+        .contentType(MediaType.APPLICATION_JSON_VALUE)
+        .content(new ObjectMapper().writeValueAsString(uploadPublicKeyRequest))
+      )
       .andExpect(status().isForbidden());
   }
 

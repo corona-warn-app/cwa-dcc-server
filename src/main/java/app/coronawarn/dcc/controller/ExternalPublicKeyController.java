@@ -97,6 +97,9 @@ public class ExternalPublicKeyController {
       } else if (e.getReason()
         == DccRegistrationService.DccRegistrationException.Reason.REGISTRATION_TOKEN_ALREADY_EXISTS) {
         throw new DccServerException(HttpStatus.CONFLICT, "RegistrationToken is already assigned with a PublicKey.");
+      } else if (e.getReason()
+        == DccRegistrationService.DccRegistrationException.Reason.NO_LAB_ID) {
+        throw new DccServerException(HttpStatus.FORBIDDEN, "Lab has not provided any LabId for this TestResult.");
       } else {
         throw new DccServerException(HttpStatus.INTERNAL_SERVER_ERROR, "Unexpected error");
       }
