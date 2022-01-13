@@ -41,7 +41,6 @@
     <liquibase.version>4.6.2</liquibase.version>
     <springdoc.version>1.6.4</springdoc.version>
     <cbor.version>4.5</cbor.version>
-    <hibernate-validator.version>6.1.5.Final</hibernate-validator.version>
     <shedlock.version>4.30.0</shedlock.version>
     <!-- plugins -->
     <plugin.checkstyle.version>3.1.2</plugin.checkstyle.version>
