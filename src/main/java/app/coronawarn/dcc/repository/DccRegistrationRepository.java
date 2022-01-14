@@ -37,7 +37,7 @@ public interface DccRegistrationRepository extends JpaRepository<DccRegistration
 
   Optional<DccRegistration> findByRegistrationToken(String registrationToken);
 
-  List<DccRegistration> findByLabIdAndDccHashIsNull(String labId);
+  List<DccRegistration> findByLabIdAndDccHashIsNullAndPublicKeyIsNotNull(String labId);
 
   Optional<DccRegistration> findByHashedGuid(String hashedGuid);
 
@@ -48,11 +48,12 @@ public interface DccRegistrationRepository extends JpaRepository<DccRegistration
   @Modifying(clearAutomatically = true, flushAutomatically = true)
   @Query("UPDATE DccRegistration d SET d.dcc = NULL, d.publicKey = NULL, d.encryptedDataEncryptionKey = NULL,"
     + " d.error = NULL, d.hashedGuid = NULL, d.dccEncryptedPayload = NULL"
-    + " WHERE d.updatedAt < :threshold AND d.dcc IS NOT NULL")
+    + " WHERE d.updatedAt < :threshold AND d.publicKey IS NOT NULL")
   int removeDccDataByUpdatedAtBefore(@Param("threshold") LocalDateTime threshold);
 
   @Modifying(clearAutomatically = true, flushAutomatically = true)
-  @Query("UPDATE DccRegistration d SET d.registrationToken = NULL"
+  @Query("UPDATE DccRegistration d SET d.registrationToken = NULL, d.dcc = NULL, d.publicKey = NULL,"
+    + " d.encryptedDataEncryptionKey = NULL, d.error = NULL, d.hashedGuid = NULL, d.dccEncryptedPayload = NULL"
     + " WHERE d.createdAt < :threshold AND d.registrationToken IS NOT NULL")
   int removeRegistrationTokenByCreatedAtBefore(@Param("threshold") LocalDateTime threshold);
 }
