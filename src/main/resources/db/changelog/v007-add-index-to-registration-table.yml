@@ -1,0 +1,17 @@
+databaseChangeLog:
+  - changeSet:
+      id: add-index-to-registration-table
+      author: f11h
+      changes:
+        - createIndex:
+            tableName: dcc_registration
+            indexName: idx_dcc_registration_public_key
+            columns:
+              - column:
+                  name: public_key
+        - createIndex:
+            tableName: dcc_registration
+            indexName: idx_dcc_registration_dcc_hash
+            columns:
+              - column:
+                  name: dcc_hash
