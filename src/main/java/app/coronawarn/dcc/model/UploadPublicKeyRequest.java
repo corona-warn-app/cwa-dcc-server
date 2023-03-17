@@ -42,7 +42,8 @@ public class UploadPublicKeyRequest {
   private String registrationToken;
 
   @NotNull
-  @Schema(description = "Base64 encoded public key in DER format to encrypt DCC payload components.", requiredMode = Schema.RequiredMode.REQUIRED)
+  @Schema(description = "Base64 encoded public key in DER format to encrypt DCC payload components.",
+    requiredMode = Schema.RequiredMode.REQUIRED)
   private String publicKey;
 
   @JsonInclude(JsonInclude.Include.NON_NULL)
