@@ -21,10 +21,10 @@
 package app.coronawarn.dcc.service;
 
 import app.coronawarn.dcc.config.DccApplicationConfig;
+import jakarta.annotation.PostConstruct;
 import java.math.BigInteger;
 import java.nio.ByteBuffer;
 import java.util.UUID;
-import javax.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 

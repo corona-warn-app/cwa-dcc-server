@@ -31,11 +31,11 @@ import static app.coronawarn.dcc.utils.TestValues.testId;
 
 import app.coronawarn.dcc.domain.DccRegistration;
 import app.coronawarn.dcc.repository.DccRegistrationRepository;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.EntityManagerFactory;
+import jakarta.persistence.EntityTransaction;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.EntityTransaction;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

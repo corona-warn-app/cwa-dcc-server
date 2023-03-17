@@ -21,7 +21,7 @@
 package app.coronawarn.dcc.model;
 
 import io.swagger.v3.oas.annotations.media.Schema;
-import javax.validation.constraints.Pattern;
+import jakarta.validation.constraints.Pattern;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -35,7 +35,7 @@ import lombok.NoArgsConstructor;
 public class RegistrationToken {
 
   @Pattern(regexp = "^[a-f0-9]{8}-[a-f0-9]{4}-4[a-f0-9]{3}-[89aAbB][a-f0-9]{3}-[a-f0-9]{12}$")
-  @Schema(description = "registrationToken from Verification Server", required = true)
+  @Schema(description = "registrationToken from Verification Server", requiredMode = Schema.RequiredMode.REQUIRED)
   private String registrationToken;
 
 }
