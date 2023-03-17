@@ -22,9 +22,9 @@ package app.coronawarn.dcc.model;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import io.swagger.v3.oas.annotations.media.Schema;
-import javax.persistence.Transient;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Pattern;
+import jakarta.persistence.Transient;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Pattern;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -38,11 +38,11 @@ import lombok.NoArgsConstructor;
 public class UploadPublicKeyRequest {
 
   @Pattern(regexp = "^[a-f0-9]{8}-[a-f0-9]{4}-4[a-f0-9]{3}-[89aAbB][a-f0-9]{3}-[a-f0-9]{12}$")
-  @Schema(description = "registrationToken from Verification Server", required = true)
+  @Schema(description = "registrationToken from Verification Server", requiredMode = Schema.RequiredMode.REQUIRED)
   private String registrationToken;
 
   @NotNull
-  @Schema(description = "Base64 encoded public key in DER format to encrypt DCC payload components.", required = true)
+  @Schema(description = "Base64 encoded public key in DER format to encrypt DCC payload components.", requiredMode = Schema.RequiredMode.REQUIRED)
   private String publicKey;
 
   @JsonInclude(JsonInclude.Include.NON_NULL)
